@@ -320,6 +320,7 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
 .btn.sec:hover { background: #f7f8f7; border-color: rgba(7,17,38,.25); }
 .btn.sec[aria-pressed="true"] { background: #071126; border-color: #071126; }
 .btn.sec.lig[aria-pressed="true"] { background: #e7f4f1; border-color: #bbded9; color: #225f5e; }
+#btnMicrofone { min-width: 124px; white-space: nowrap; }
 .btn.mini { padding: 7px 10px; font-size: 11px; }
 .btn.teal { background: #2864dc; color: #fff; }
 .btn.teal:hover { background: #1f53b8; }
