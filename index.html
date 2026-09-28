@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>PDV-01 · Atmosfera padrão ISA | SAFE</title>
+<link rel="icon" type="image/png" sizes="512x512" href="assets/safe-favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
@@ -360,7 +363,7 @@
       <div class="topo-copy">
         <div class="eyebrow">Princípios do Voo <span aria-hidden="true">/</span> Formação PC/IFR</div>
         <h1>Pista curta.<br> <span>Tarde quente.</span></h1>
-        <p class="sub">Duas janelas de voo e uma pista de 900 m. Qual horário oferece mais margem para decolar?</p>
+        <p class="sub">Dois slots de voo e uma pista de 900 m. Qual horário oferece mais margem para decolar?</p>
         <div class="topo-acoes">
           <a class="topo-iniciar" href="#et-briefing">Iniciar briefing <span aria-hidden="true">↗</span></a>
           <div class="chips" aria-label="Informações da lição">
@@ -385,9 +388,7 @@
     <span class="led" aria-hidden="true"></span>
     <p id="estadoTexto"><b>Preparando a missão.</b> A página verifica se a tutoria interativa está disponível neste endereço.</p>
     <div class="controles">
-      <button class="btn sec mini lig" id="btnVoz" aria-pressed="true" title="O comandante fala e você pode responder falando">Voz: ligada</button>
-      <button class="btn sec mini lig" id="btnRadio" aria-pressed="true" title="Entrega do comandante com canal VHF simulado">Canal VHF: ligado</button>
-      <button class="btn sec mini lig" id="btnSom" aria-pressed="true" title="Sons de veredito e trilha tensa nos desafios">Som: ligado</button>
+      <button class="btn sec mini lig" id="btnMicrofone" aria-pressed="true" title="Ativa o ditado das respostas do aluno">Microfone: ativo</button>
     </div>
   </div>
   <p id="avisoMic" class="dica-voz" hidden style="margin:8px 4px 0"></p>
@@ -441,7 +442,7 @@
         <form class="form" id="form-briefing" hidden>
           <label class="visually-hidden" for="just-briefing">Por quê?</label>
           <textarea id="just-briefing" placeholder="Por quê? Uma ou duas frases, com o que você sabe hoje." required></textarea>
-          <div class="linha"><button class="btn" type="submit">Enviar ao comandante</button><button type="button" class="btn sec mic" data-mic="just-briefing" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Na primeira vez, escolha permitir em todas as visitas no navegador. Diga “câmbio” para enviar.</span></div>
+          <div class="linha"><button class="btn" type="submit">Enviar ao comandante</button><button type="button" class="btn sec mic" data-mic="just-briefing" hidden aria-pressed="false">Ditar resposta</button><span class="dica-voz" data-dica-voz hidden>Na primeira vez, escolha permitir em todas as visitas no navegador. Diga “câmbio” para enviar.</span></div>
         </form>
         <div class="linha" id="pos-briefing" hidden>
           <button class="btn teal" data-abrir="regua">Ver o conteúdo 1: a régua</button>
@@ -478,7 +479,7 @@
           <form class="form" id="form-regua" hidden>
             <label class="visually-hidden" for="resp-regua">Sua resposta</label>
             <textarea id="resp-regua" placeholder="Escreva o raciocínio, não só o número." required></textarea>
-            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-regua" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="regua">Pular esta etapa</button></div>
+            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-regua" hidden aria-pressed="false">Ditar resposta</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="regua">Pular esta etapa</button></div>
           </form>
           <div class="linha" id="pos-regua" hidden><button class="btn teal" data-abrir="pressao">Seguir para a pressão</button></div>
         </div>
@@ -528,7 +529,7 @@
           <form class="form" id="form-pressao" hidden>
             <label class="visually-hidden" for="resp-pressao">Sua resposta</label>
             <textarea id="resp-pressao" placeholder="Diga a direção do erro e a ordem de grandeza." required></textarea>
-            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-pressao" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="pressao">Pular esta etapa</button></div>
+            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-pressao" hidden aria-pressed="false">Ditar resposta</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="pressao">Pular esta etapa</button></div>
           </form>
           <div class="linha" id="pos-pressao" hidden><button class="btn teal" data-abrir="densidade">Seguir para a densidade</button></div>
         </div>
@@ -563,7 +564,7 @@
           <form class="form" id="form-densidade" hidden>
             <label class="visually-hidden" for="resp-densidade">Sua resposta</label>
             <textarea id="resp-densidade" placeholder="Explique com o mecanismo, não com a frase decorada." required></textarea>
-            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-densidade" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="densidade">Pular esta etapa</button></div>
+            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-densidade" hidden aria-pressed="false">Ditar resposta</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="densidade">Pular esta etapa</button></div>
           </form>
           <div class="linha" id="pos-densidade" hidden><button class="btn teal" data-abrir="decisao">Voltar ao despachante</button></div>
         </div>
@@ -619,7 +620,7 @@
             </fieldset>
             <label class="visually-hidden" for="just-decisao">Justificativa</label>
             <textarea id="just-decisao" placeholder="Justifique em duas ou três frases: o que muda no ar e o que isso faz com a pista." required></textarea>
-            <div class="linha"><button class="btn" type="submit">Enviar decisão</button><button type="button" class="btn sec mic" data-mic="just-decisao" hidden aria-pressed="false">Falar a justificativa</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="decisao">Pular esta etapa</button></div>
+            <div class="linha"><button class="btn" type="submit">Enviar decisão</button><button type="button" class="btn sec mic" data-mic="just-decisao" hidden aria-pressed="false">Ditar justificativa</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="decisao">Pular esta etapa</button></div>
           </form>
           <div class="regua" id="regua-decisao" hidden>
             <div class="barra"><span class="rot">Elevação real</span><div class="tr"><div class="fill" style="width:0" data-w="40"></div></div><span class="n">2.000 ft</span></div>
@@ -647,7 +648,7 @@
           <form class="form" id="form-novato">
             <label class="visually-hidden" for="resp-novato">Sua explicação</label>
             <textarea id="resp-novato" placeholder="Explique como explicaria no hangar." required></textarea>
-            <div class="linha"><button class="btn" type="submit">Responder ao copiloto</button><button type="button" class="btn sec mic" data-mic="resp-novato" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><span class="tempo" id="rodada-novato">rodada 1 de 3</span><button type="button" class="pular" data-pular="novato">Pular esta etapa</button></div>
+            <div class="linha"><button class="btn" type="submit">Responder ao copiloto</button><button type="button" class="btn sec mic" data-mic="resp-novato" hidden aria-pressed="false">Ditar resposta</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><span class="tempo" id="rodada-novato">rodada 1 de 3</span><button type="button" class="pular" data-pular="novato">Pular esta etapa</button></div>
           </form>
           <div class="linha" id="pos-novato" hidden><button class="btn teal" data-abrir="debrief">Encerrar e ver o debriefing</button></div>
         </div>
@@ -763,12 +764,14 @@
             <tr><td>Sequenciamento claro</td><td>Trilha numerada, uma etapa libera a seguinte.</td></tr>
           </tbody>
         </table>
+        <div id="recursosAudioFuturos" hidden>
         <h3 style="margin-top:16px">Voz e som</h3>
         <p id="capVoz" style="font-size:14px;color:var(--muted)"></p>
         <label style="font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Voz do comandante <select id="selVozCmd"></select> <button class="btn sec mini" type="button" data-testar-voz="comandante">Testar</button></label>
         <label style="font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px">Voz do copiloto <select id="selVozNov"></select> <button class="btn sec mini" type="button" data-testar-voz="novato">Testar</button></label>
         <div class="teste-som"><button class="btn sec mini" type="button" data-testar-som="correto">Som: correto</button><button class="btn sec mini" type="button" data-testar-som="erro">Som: erro</button><button class="btn sec mini" type="button" data-testar-som="desbloqueio">Som: nova etapa</button><button class="btn sec mini" type="button" data-testar-som="bed">Trilha tensa, 5 s</button></div>
-        <p style="font-size:13.5px;color:var(--muted);margin-top:8px">A voz é a do navegador (Web Speech API): no Edge há vozes naturais em português do Brasil; no Chrome, a voz do Google. Com o <b>Canal VHF</b> ligado, o comandante fala em cadência de rádio e a transmissão recebe ruído de abertura e fechamento. O microfone depende de o navegador liberar o acesso dentro desta janela; se bloquear, a resposta é digitada. Sons e trilha são gerados na hora pela página (Web Audio), sem arquivo externo.</p>
+        <p style="font-size:13.5px;color:var(--muted);margin-top:8px">Recursos de leitura de voz, canal VHF e efeitos sonoros reservados para uma versão futura. O microfone de ditado funciona de forma independente.</p>
+        </div>
         <h3 style="margin-top:16px">Ajustes desta demonstração</h3>
         <label style="font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Modelo das falas
           <select id="selModelo">
@@ -895,7 +898,7 @@
   }
 
   const Voz = {
-    ligada:true, radio:true, suportaTTS:('speechSynthesis' in window), RecCtor:(window.SpeechRecognition || window.webkitSpeechRecognition || null),
+    ligada:false, radio:false, micAtivo:true, suportaTTS:('speechSynthesis' in window), RecCtor:(window.SpeechRecognition || window.webkitSpeechRecognition || null),
     vozes:[], vozCmd:null, vozNov:null, rec:null, ouvindo:false, micBloqueado:false, micOk:false, ultimoErro:null, qualidade:-1, escolhaManual:false,
     nota(x){ return (/natural|neural/i.test(x.name) ? 120 : 0) + (/microsoft/i.test(x.name) ? 55 : 0) + (/google/i.test(x.name) ? 40 : 0) + (/online/i.test(x.name) ? 20 : 0) + (x.localService === false ? 10 : 0) + (/desktop/i.test(x.name) ? -30 : 0); },
     carregarVozes(){ if (!this.suportaTTS) return; const todas = speechSynthesis.getVoices(); let v = todas.filter(x => /pt[-_]BR/i.test(x.lang)); if (!v.length) v = todas.filter(x => /^pt/i.test(x.lang)); v = v.slice().sort((a, b) => this.nota(b) - this.nota(a)); this.vozes = v; this.qualidade = v.length ? this.nota(v[0]) : -1;
@@ -922,12 +925,12 @@
       rec.onresult = ev => { let interim = ''; for (let i = ev.resultIndex; i < ev.results.length; i++) { const r = ev.results[i]; if (r.isFinal) finalTxt += r[0].transcript + ' '; else interim += r[0].transcript; } ta.value = (base + finalTxt + interim).replace(/\s+/g, ' ').trimStart(); if (/c[âa]mbio[.!]?\s*$/i.test(finalTxt)) { ta.value = ta.value.replace(/[,\s]*c[âa]mbio[.!]?\s*$/i, '').trim(); rec.onend = null; this.pararOuvir(); this.ouvindo = false; this.rec = null; if (botao) this._botaoIdle(botao); if (o.aoEnviar) o.aoEnviar(); } };
       rec.onstart = () => { this.micOk = true; this.micBloqueado = false; document.getElementById('avisoMic').hidden = true; registrar('voz', 'microfone', 'liberado'); };
       rec.onerror = ev => { this.ultimoErro = ev.error; if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') this.micOk = false; };
-      rec.onend = () => { this.ouvindo = false; this.rec = null; if (botao) this._botaoIdle(botao); if (this.ultimoErro === 'not-allowed' || this.ultimoErro === 'service-not-allowed') avisoMic('Acesso ao microfone negado. Abra esta página diretamente no Chrome ou Edge e, nas permissões do site, escolha permitir em todas as visitas.'); else if (this.ultimoErro === 'no-speech') avisoMic('Não ouvi nada. Toque em Falar e responda perto do microfone.'); else if (this.ultimoErro === 'audio-capture') avisoMic('Nenhum microfone encontrado.'); };
+      rec.onend = () => { this.ouvindo = false; this.rec = null; if (botao) this._botaoIdle(botao); if (this.ultimoErro === 'not-allowed' || this.ultimoErro === 'service-not-allowed') avisoMic('Acesso ao microfone negado. Abra esta página diretamente no Chrome ou Edge e, nas permissões do site, escolha permitir em todas as visitas.'); else if (this.ultimoErro === 'no-speech') avisoMic('Não ouvi nada. Toque em Ditar resposta e fale perto do microfone.'); else if (this.ultimoErro === 'audio-capture') avisoMic('Nenhum microfone encontrado.'); };
       try { rec.start(); } catch(e) { return false; } this.rec = rec; this.ouvindo = true; if (botao) { botao.classList.add('ouvindo'); botao.textContent = 'Ouvindo… toque para parar'; botao.setAttribute('aria-pressed', 'true'); } return true; },
-    _botaoIdle(b){ b.classList.remove('ouvindo'); b.textContent = b.dataset.rotulo || 'Falar'; b.setAttribute('aria-pressed', 'false'); },
+    _botaoIdle(b){ b.classList.remove('ouvindo'); b.textContent = b.dataset.rotulo || 'Ditar resposta'; b.setAttribute('aria-pressed', 'false'); },
     pararOuvir(){ if (this.rec) { try { this.rec.stop(); } catch(e){} } }
   };
-  function avisoMic(msg){ const el = document.getElementById('avisoMic'); el.textContent = msg; el.hidden = false; if (Voz.micBloqueado) { document.querySelectorAll('[data-mic]').forEach(b => { b.hidden = true; }); document.querySelectorAll('[data-dica-voz]').forEach(s => { s.hidden = true; }); } }
+  function avisoMic(msg){ const el = document.getElementById('avisoMic'); el.textContent = msg; el.hidden = false; if (Voz.micBloqueado) pintarToggles(); }
   function avisarQualidadeVoz(){ const el = document.getElementById('avisoVoz'); if (!el) return; if (!Voz.ligada || !Voz.suportaTTS) { el.hidden = true; return; } if (!Voz.vozes.length) { el.textContent = 'Este navegador não tem voz em português instalada. As falas ficam só em texto.'; el.hidden = false; return; } if (Voz.qualidade < 100) { el.textContent = 'Voz em uso: ' + (Voz.vozCmd ? Voz.vozCmd.name : 'nenhuma') + '. Neste navegador só há vozes básicas. Abra este mesmo endereço no Microsoft Edge: lá a página escolhe sozinha as vozes naturais Antonio e Francisca, e o microfone costuma ser liberado.'; el.hidden = false; } else { el.textContent = 'Vozes naturais em uso: ' + Voz.vozCmd.name.replace(/ - .*$/, '') + ' (comandante) e ' + Voz.vozNov.name.replace(/ - .*$/, '') + ' (copiloto).'; el.hidden = false; } }
   function politicaMic(){ const pp = document.permissionsPolicy || document.featurePolicy; if (pp && typeof pp.allowsFeature === 'function') { try { return pp.allowsFeature('microphone') ? 'permitida' : 'bloqueada'; } catch(e) { return 'desconhecida'; } } return 'desconhecida'; }
   function faladorIncremental(papel){ let dito = 0, ultimo = ''; return { alimentar(t){ ultimo = t; for (;;) { const resto = t.slice(dito); const m = resto.match(/^[\s\S]*?[.!?…](?=\s|$)/); if (!m) break; dito += m[0].length; const frase = m[0].trim(); if (frase) Voz.falar(paraFala(frase), papel); } }, fechar(){ const resto = ultimo.slice(dito).trim(); dito = ultimo.length; if (resto) Voz.falar(paraFala(resto), papel); } }; }
@@ -971,9 +974,7 @@
     desafioRecebido: {},
     etapaAtual: 'briefing'
   };
-  try { if (localStorage.getItem('pdv01-voz') === '0') Voz.ligada = false; } catch(e){}
-  try { if (localStorage.getItem('pdv01-radio') === '0') Voz.radio = false; } catch(e){}
-  try { Som.ligado = localStorage.getItem('pdv01-som') !== '0'; } catch(e){ Som.ligado = true; }
+  try { Voz.micAtivo = localStorage.getItem('pdv01-microfone') !== '0'; } catch(e){ Voz.micAtivo = true; }
   try { const m = localStorage.getItem('pdv01-modelo'); if (m && ['quick','default','complex'].includes(m)) S.modelo = m; } catch(e){}
 
   /* ---------- Retomada local da missão ---------- */
@@ -1619,7 +1620,7 @@
     if (!ok) avisoMic('O reconhecimento de voz não está disponível neste navegador. Digite a resposta.');
   }); });
   async function ouvirAutomatico(form){
-    if (!Voz.ligada || !Voz.micOk || Voz.ouvindo || !form || form.hidden || document.visibilityState !== 'visible') return;
+    if (!Voz.micAtivo || !Voz.micOk || Voz.ouvindo || !form || form.hidden || document.visibilityState !== 'visible') return;
     try {
       if (!navigator.permissions) return;
       const permissao = await navigator.permissions.query({name:'microphone'});
@@ -1627,17 +1628,17 @@
     } catch(e) { return; }
     const b = form.querySelector('[data-mic]'); if (b && !b.hidden) b.click();
   }
-  function atualizarMics(){ const mostrar = Voz.ligada && !!Voz.RecCtor && !Voz.micBloqueado; document.querySelectorAll('[data-mic]').forEach(b => { b.hidden = !mostrar; }); document.querySelectorAll('[data-dica-voz]').forEach(s => { s.hidden = !mostrar; }); const ob = document.getElementById('btnOuvirBriefing'); if (ob) ob.hidden = !(Voz.ligada && Voz.suportaTTS); }
+  function atualizarMics(){ const mostrar = Voz.micAtivo && !!Voz.RecCtor && !Voz.micBloqueado; document.querySelectorAll('[data-mic]').forEach(b => { b.hidden = !mostrar; }); document.querySelectorAll('[data-dica-voz]').forEach(s => { s.hidden = !mostrar; }); const ob = document.getElementById('btnOuvirBriefing'); if (ob) ob.hidden = true; }
 
-  const btnVoz = document.getElementById('btnVoz'), btnRadio = document.getElementById('btnRadio'), btnSom = document.getElementById('btnSom');
+  const btnMicrofone = document.getElementById('btnMicrofone');
   function pintarToggles(){
-    btnVoz.setAttribute('aria-pressed', String(Voz.ligada)); btnVoz.textContent = 'Voz: ' + (Voz.ligada ? 'ligada' : 'desligada');
-    btnRadio.setAttribute('aria-pressed', String(Voz.radio)); btnRadio.textContent = 'Canal VHF: ' + (Voz.radio ? 'ligado' : 'limpo');
-    btnSom.setAttribute('aria-pressed', String(Som.ligado)); btnSom.textContent = 'Som: ' + (Som.ligado ? 'ligado' : 'desligado'); atualizarMics();
+    const disponivel = !!Voz.RecCtor && !Voz.micBloqueado;
+    btnMicrofone.disabled = !disponivel;
+    btnMicrofone.setAttribute('aria-pressed', String(Voz.micAtivo && disponivel));
+    btnMicrofone.textContent = disponivel ? 'Microfone: ' + (Voz.micAtivo ? 'ativo' : 'inativo') : 'Microfone: indisponível';
+    atualizarMics();
   }
-  btnVoz.addEventListener('click', () => { Voz.ligada = !Voz.ligada; if (!Voz.ligada) { Voz.calar(); Voz.pararOuvir(); } try { localStorage.setItem('pdv01-voz', Voz.ligada ? '1' : '0'); } catch(e){} pintarToggles(); avisarQualidadeVoz(); registrar('ajustes', 'voz', Voz.ligada ? 'ligada' : 'desligada'); if (Voz.ligada) Voz.falar('Voz ligada.', 'comandante'); });
-  btnRadio.addEventListener('click', () => { Voz.radio = !Voz.radio; try { localStorage.setItem('pdv01-radio', Voz.radio ? '1' : '0'); } catch(e){} pintarToggles(); registrar('ajustes', 'canal VHF', Voz.radio ? 'ligado' : 'limpo'); if (Voz.ligada) Voz.falar(Voz.radio ? 'Canal VHF ligado. Prossiga.' : 'Canal limpo. Prossiga.', 'comandante'); });
-  btnSom.addEventListener('click', async () => { await Som.ligar(!Som.ligado); try { localStorage.setItem('pdv01-som', Som.ligado ? '1' : '0'); } catch(e){} pintarToggles(); registrar('ajustes', 'som', Som.ligado ? 'ligado' : 'desligado'); if (Som.ligado) Som.desbloqueio(); });
+  btnMicrofone.addEventListener('click', () => { Voz.micAtivo = !Voz.micAtivo; if (!Voz.micAtivo) Voz.pararOuvir(); try { localStorage.setItem('pdv01-microfone', Voz.micAtivo ? '1' : '0'); } catch(e){} pintarToggles(); registrar('ajustes', 'microfone', Voz.micAtivo ? 'ativo' : 'inativo'); });
   const acordar = () => { if (Som.ligado) Som.ligar(true); };
   document.addEventListener('pointerdown', acordar, {once:true}); document.addEventListener('keydown', acordar, {once:true});
   document.getElementById('btnOuvirBriefing').addEventListener('click', () => { const t = document.querySelector('#chat-briefing .bolha[data-papel="despachante"] .fala').textContent; Som.radio(); Voz.falar(paraFala(t), 'despachante', {aoFim: () => Som.radioFim()}); });
@@ -1647,8 +1648,7 @@
   document.getElementById('selVozNov').addEventListener('change', e => { Voz.vozNov = Voz.vozes[Number(e.target.value)] || Voz.vozNov; Voz.escolhaManual = true; avisarQualidadeVoz(); });
   document.querySelectorAll('[data-testar-voz]').forEach(b => b.addEventListener('click', () => { const p = b.dataset.testarVoz; const lig = Voz.ligada; Voz.ligada = true; Voz.falar(p === 'novato' ? 'Comandante, não entendi por que sete horas e não quatorze.' : 'Aqui é o comandante. Isa a dois mil pés: onze graus. Câmbio.', p); Voz.ligada = lig; }));
   document.querySelectorAll('[data-testar-som]').forEach(b => b.addEventListener('click', async () => { await Som.ligar(true); pintarToggles(); const t = b.dataset.testarSom; if (t === 'bed') { Som.iniciarBed(); Som.setRitmo(96); setTimeout(() => Som.pararBed(), 5000); } else if (typeof Som[t] === 'function') Som[t](); }));
-  if (!Voz.suportaTTS) Voz.ligada = false;
-  if (Voz.suportaTTS) { Voz.carregarVozes(); speechSynthesis.addEventListener('voiceschanged', () => Voz.carregarVozes()); } else preencherVozes();
+  preencherVozes();
   pintarToggles();
 
   function renderCumprida(){
