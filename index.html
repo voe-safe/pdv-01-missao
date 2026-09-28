@@ -64,17 +64,6 @@
   .chip-topo.vivo{border-color:var(--teal);color:var(--teal)}
   @media (max-width:640px){.topo-in{grid-template-columns:1fr;gap:16px}.marca{width:120px}}
 
-  /* Faixa de estado do agente */
-  .estado{max-width:1180px;margin:16px auto 0;padding:0 24px}
-  .estado-in{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;box-shadow:var(--sombra)}
-  .led{flex:0 0 auto;width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--faint)}
-  .estado[data-modo="pronto"] .led{background:var(--teal)}
-  .estado[data-modo="ausente"] .led{background:var(--amber)}
-  .estado[data-modo="verificando"] .led{background:var(--blue);animation:pulsa 1.2s ease-in-out infinite}
-  @keyframes pulsa{0%,100%{opacity:1}50%{opacity:.35}}
-  .estado b{color:var(--ink)}
-  .estado p{margin:0;color:var(--muted);font-size:14.5px}
-
   /* Orientação da missão */
   .orientacao{max-width:1180px;margin:16px auto 0;padding:0 24px}
   .orientacao-in{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:var(--wash);border:1px solid var(--line);border-radius:var(--r);padding:13px 16px}
@@ -117,7 +106,7 @@
   .etapa-corpo > p, .conteudo p{max-width:68ch}
   .revelar{animation:sobe .28s ease-out both}
   @keyframes sobe{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){.revelar{animation:none}.estado .led{animation:none}.cursor{animation:none}}
+  @media (prefers-reduced-motion:reduce){.revelar{animation:none}.cursor{animation:none}}
 
   /* Faixa operacional */
   .dados{font:500 13px/1.6 var(--font-mono);background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;color:var(--ink);margin:6px 0 14px}
@@ -291,8 +280,6 @@
   select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
 
   /* Voz, som e jogo */
-  .estado-in{align-items:center}
-  .controles{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .btn.sec.lig[aria-pressed="true"]{background:var(--teal);color:#0E2A2A;border-color:var(--teal)}
   .desafio-intro{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 4px}
   .desafio-intro p{margin:0;color:var(--muted)}
@@ -346,7 +333,7 @@
   footer{max-width:1180px;margin:0 auto;padding:0 24px 40px;color:var(--muted);font-size:13px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
   footer svg{width:16px;height:auto}
 </style>
-<link rel="stylesheet" href="safe-premium-missao.css?v=20260928-mic">
+<link rel="stylesheet" href="safe-premium-missao.css?v=20260928-slots">
 </head>
 <body>
 <header class="topo">
@@ -357,7 +344,10 @@
         <span class="topo-divisor" aria-hidden="true"></span>
         <span class="topo-produto">Academia SAFE</span>
       </div>
-      <span class="topo-edicao">PDV-01 <span aria-hidden="true">/</span> MISSÃO GUIADA</span>
+      <div class="topo-direita">
+        <span class="topo-edicao">PDV-01 <span aria-hidden="true">/</span> MISSÃO GUIADA</span>
+        <button class="mic-controle" id="btnMicrofone" type="button" aria-pressed="true" title="Ativar ou desativar o ditado das respostas">Microfone: ativo</button>
+      </div>
     </div>
     <div class="topo-hero">
       <div class="topo-copy">
@@ -369,11 +359,10 @@
           <div class="chips" aria-label="Informações da lição">
             <span class="chip-topo">Atmosfera padrão ISA</span>
             <span class="chip-topo">≈ 15 min</span>
-            <span class="chip-topo vivo" id="chipVivo">Tutoria interativa</span>
           </div>
         </div>
       </div>
-      <div class="topo-cenario" role="img" aria-label="Comparativo das janelas: 07:00, 18 graus; 14:00, 34 graus; pista de 900 metros, mesmo vento e mesmo peso">
+      <div class="topo-cenario" role="img" aria-label="Comparativo dos slots: 07:00, 18 graus; 14:00, 34 graus; pista de 900 metros, mesmo vento e mesmo peso">
         <div class="cenario-cab"><span>Condições do briefing</span><strong>Amarais · Campinas</strong></div>
         <div class="cenario-janela manha"><span class="cenario-hora">07:00</span><strong>18 °C</strong><span class="cenario-barra"><i></i></span></div>
         <div class="cenario-janela tarde"><span class="cenario-hora">14:00</span><strong>34 °C</strong><span class="cenario-barra"><i></i></span></div>
@@ -383,21 +372,11 @@
   </div>
 </header>
 
-<div class="estado" id="estado" data-modo="verificando">
-  <div class="estado-in">
-    <span class="led" aria-hidden="true"></span>
-    <p id="estadoTexto"><b>Preparando a missão.</b> A página verifica se a tutoria interativa está disponível neste endereço.</p>
-    <div class="controles">
-      <button class="btn sec mini lig" id="btnMicrofone" aria-pressed="true" title="Ativa o ditado das respostas do aluno">Microfone: ativo</button>
-    </div>
-  </div>
-  <p id="avisoMic" class="dica-voz" hidden style="margin:8px 4px 0"></p>
-  <p id="avisoVoz" class="dica-voz" hidden style="margin:6px 4px 0"></p>
-</div>
+<p id="avisoMic" class="aviso-mic" role="alert" hidden></p>
 
 <section class="orientacao" aria-label="Objetivo atual da missão">
   <div class="orientacao-in">
-    <div><div class="orientacao-kicker" id="orientacaoEtapa">Etapa 1 de 7</div><p class="orientacao-titulo" id="orientacaoTexto"><b>Objetivo:</b> escolha uma janela de voo e defenda seu raciocínio inicial.</p></div>
+    <div><div class="orientacao-kicker" id="orientacaoEtapa">Etapa 1 de 7</div><p class="orientacao-titulo" id="orientacaoTexto"><b>Objetivo:</b> escolha um slot de voo e defenda seu raciocínio inicial.</p></div>
     <div class="progresso-wrap"><span id="orientacaoPct">0% concluído</span><div class="progresso-trilha" aria-hidden="true"><i id="orientacaoBarra"></i></div></div>
   </div>
 </section>
@@ -413,7 +392,7 @@
     <section class="etapa is-open" id="et-briefing" data-etapa="briefing">
       <div class="marcador"><span>1</span></div>
       <div class="etapa-cab">
-        <div><div class="eyebrow">Etapa 1 · Briefing</div><h2>Duas janelas, uma pista de 900 m</h2></div>
+        <div><div class="eyebrow">Etapa 1 · Briefing</div><h2>Dois slots, uma pista de 900 m</h2></div>
         <span class="dur">2 min</span>
       </div>
       <div class="etapa-corpo">
@@ -431,7 +410,7 @@
           </div>
         </div>
         <div class="chat" id="chat-briefing">
-          <div class="bolha bolha-agente" data-papel="despachante"><span class="chip">Despachante</span><p class="fala">Tenho duas janelas para o seu voo de instrução: 07:00 ou 14:00. Mesma aeronave, mesmo peso, mesma pista de 900 m. O instrutor quer a sua escolha e a sua justificativa antes do briefing. Você ainda não estudou esta lição, e é de propósito. Decida com o que você sabe hoje.</p></div>
+          <div class="bolha bolha-agente" data-papel="despachante"><span class="chip">Despachante</span><p class="fala">Tenho dois slots para o seu voo de instrução: 07:00 ou 14:00. Mesma aeronave, mesmo peso, mesma pista de 900 m. O instrutor quer a sua escolha e a sua justificativa antes do briefing. Você ainda não estudou esta lição, e é de propósito. Decida com o que você sabe hoje.</p></div>
         </div>
         <div class="linha" style="margin:-2px 0 10px"><button class="btn sec mini" id="btnOuvirBriefing" type="button" hidden>Ouvir o briefing pelo rádio</button></div>
         <div class="linha" id="palpites">
@@ -593,7 +572,7 @@
           </div>
           <p>O cálculo exato, com o E6B e os gráficos do manual de voo, vem em Performance, PER-09 e PER-10. Aqui basta a regra prática.</p>
           <section class="mapa-operacional" id="mapaOperacional" data-hora="07" aria-label="Mapa visual comparativo de pista">
-            <div class="mapa-cab"><div><h3>Mesma pista. Outro ar.</h3><p>Alterne a janela para enxergar a consequência antes de fechar a decisão.</p></div><div class="mapa-toggle" role="group" aria-label="Janela de voo"><button class="btn sec mini" type="button" data-mapa-hora="07" aria-pressed="true">07:00</button><button class="btn sec mini" type="button" data-mapa-hora="14" aria-pressed="false">14:00</button></div></div>
+            <div class="mapa-cab"><div><h3>Mesma pista. Outro ar.</h3><p>Alterne o slot para enxergar a consequência antes de fechar a decisão.</p></div><div class="mapa-toggle" role="group" aria-label="Slot de voo"><button class="btn sec mini" type="button" data-mapa-hora="07" aria-pressed="true">07:00</button><button class="btn sec mini" type="button" data-mapa-hora="14" aria-pressed="false">14:00</button></div></div>
             <div class="mapa-leitura"><div class="mapa-dado"><span>Temperatura</span><b id="mapaTemp">18 °C</b></div><div class="mapa-dado"><span>Altitude sentida</span><b id="mapaAd">≈ 2.840 ft</b></div><div class="mapa-dado"><span>Condição</span><b id="mapaCond">ISA +7</b></div></div>
             <div class="pista-mapa"><span class="pista-legenda" id="mapaLegenda">Menor exigência relativa de pista</span><span class="pista-aviao" aria-hidden="true"></span><span class="pista-corrida" aria-hidden="true"></span></div>
             <p class="pista-nota" id="mapaNota">Referência visual de margem relativa; <b>não substitui</b> o cálculo com o manual de voo, o E6B e as condições reais.</p>
@@ -603,7 +582,7 @@
           <div class="eyebrow">O despachante voltou</div>
           <div class="desafio-intro" id="intro-decisao"><p>O despachante está chamando. Tenha a conta pronta: são dois minutos para a primeira resposta.</p><button class="btn" type="button" data-desafio="decisao">Receber a chamada</button><button type="button" class="pular" data-pular="decisao">Pular esta etapa</button></div>
           <div class="chat" id="chat-decisao" hidden>
-            <div class="bolha bolha-agente" data-papel="despachante"><span class="chip">Despachante</span><p class="fala" id="q-decisao">Preciso fechar a escala. Me dê a altitude-densidade às 07:00 e às 14:00 com o QNH de hoje, e a janela que você quer. O comandante confere.</p></div>
+            <div class="bolha bolha-agente" data-papel="despachante"><span class="chip">Despachante</span><p class="fala" id="q-decisao">Preciso fechar a escala. Me dê a altitude-densidade às 07:00 e às 14:00 com o QNH de hoje, e o slot que você quer. O comandante confere.</p></div>
           </div>
           <div class="cronometro" id="crono-decisao" hidden data-nivel="ok"><div class="anel-wrap"><svg class="anel" viewBox="0 0 60 60" aria-hidden="true"><circle class="anel-fundo" cx="30" cy="30" r="26"/><circle class="anel-prog" cx="30" cy="30" r="26"/></svg><span class="anel-txt">120</span></div><span class="rot">segundos para a primeira resposta<br>bônus de tempo só na decisão aceita de primeira</span></div>
           <form class="form" id="form-decisao" hidden>
@@ -612,7 +591,7 @@
               <label>Altitude-densidade às 14:00 <span class="u">(ft)</span><input type="number" id="ad14" step="10" min="0" max="20000" required></label>
             </div>
             <fieldset>
-              <legend>Janela escolhida</legend>
+              <legend>Slot escolhido</legend>
               <div class="radios">
                 <label><input type="radio" name="janela" value="07:00" required> 07:00</label>
                 <label><input type="radio" name="janela" value="14:00"> 14:00</label>
@@ -805,7 +784,7 @@
     'Se o QNH cai 10 hPa (por exemplo de 1020 para 1010) e o piloto não reajusta o altímetro, o avião está cerca de 300 ft MAIS BAIXO do que o instrumento indica. Frase da lição: "Do alto para o baixo, cuidado com o chão."',
     'Densidade é massa por volume. Reduzem a densidade: altitude (menos pressão), temperatura alta (o ar expande) e umidade (a molécula de vapor d\'água é mais leve que as de nitrogênio e oxigênio que substitui; efeito pequeno). Menos densidade: menos sustentação à mesma velocidade indicada, menos tração da hélice, menos potência no motor aspirado; corrida de decolagem mais longa, subida mais fraca, pouso mais longo. Frase: "Quente, alto e úmido é pior."',
     'Altitude-pressão: altitude lida com o altímetro ajustado em 1013 hPa. Altitude-densidade: altitude-pressão corrigida pela temperatura, cerca de 120 ft a mais por °C acima da ISA. Se o QNH não é 1013, cada hPa abaixo de 1013 acrescenta cerca de 30 ft à altitude-pressão. O cálculo exato com E6B e manual de voo fica para Performance (PER-09 e PER-10). Fonte: FAA PHAK cap. 4 e 11.',
-    'Missão de hoje: aeródromo com elevação 2.000 ft, pista 900 m, QNH 1013 hPa, vento calmo. 07:00 com 18 °C = ISA +7, altitude-densidade ≈ 2.000 + 7 × 120 = 2.840 ft. 14:00 com 34 °C = ISA +23, altitude-densidade ≈ 2.000 + 23 × 120 = 4.760 ft, cerca de 4.800 ft. A lição registra que às 14:00 a mesma aeronave usa quase 200 m a mais de pista. A janela recomendada é 07:00.'
+    'Missão de hoje: aeródromo com elevação 2.000 ft, pista 900 m, QNH 1013 hPa, vento calmo. 07:00 com 18 °C = ISA +7, altitude-densidade ≈ 2.000 + 7 × 120 = 2.840 ft. 14:00 com 34 °C = ISA +23, altitude-densidade ≈ 2.000 + 23 × 120 = 4.760 ft, cerca de 4.800 ft. A lição registra que às 14:00 a mesma aeronave usa quase 200 m a mais de pista. O slot recomendado é 07:00.'
   ];
   const REGRAS = [
     '1. Nunca dê a resposta na primeira tentativa. Faça UMA pergunta por vez. No máximo uma dica por turno; a dica aponta o caminho, não o resultado.',
@@ -981,7 +960,7 @@
   const CHAVE_PROGRESO = 'safe-pdv01-progresso-v1';
   let descartarProgresso = false;
   const ETAPAS = {
-    briefing:'escolha sua janela e defenda o palpite inicial.',
+    briefing:'escolha seu slot e defenda o palpite inicial.',
     regua:'calcule a ISA local e o desvio de temperatura.',
     pressao:'relacione o QNH ao erro de altitude.',
     densidade:'explique o que o avião sente no ar quente.',
@@ -1052,29 +1031,11 @@
 
   /* ---------- Agente ---------- */
   let sample = null;
-  let modo = 'verificando';
   const sampleReady = (async () => {
-    if (!window.claude || typeof window.claude.use !== 'function') { setModo('ausente'); return null; }
+    if (!window.claude || typeof window.claude.use !== 'function') return null;
     try { sample = await window.claude.use('sample'); } catch(e) { sample = null; }
-    setModo(sample ? 'pronto' : 'ausente');
     return sample;
   })();
-
-  function setModo(m){
-    modo = m;
-    const el = document.getElementById('estado');
-    el.dataset.modo = m;
-    const t = document.getElementById('estadoTexto');
-    const chip = document.getElementById('chipVivo');
-    if (m === 'pronto') {
-      t.innerHTML = '<b>Tutoria interativa pronta.</b> O comandante e o copiloto respondem em tempo real. Na primeira fala, o serviço pode pedir sua autorização.';
-      chip.textContent = 'Tutoria interativa';
-    } else if (m === 'ausente') {
-      t.innerHTML = '<b>Modo autoestudo.</b> A tutoria interativa não está disponível neste endereço. Cada pergunta mostra uma resposta comentada depois que você escreve a sua.';
-      chip.textContent = 'Modo autoestudo';
-      chip.classList.remove('vivo');
-    }
-  }
 
   function limparMarcador(texto){
     return String(texto).replace(/\s*`?\[\[\s*STATUS[^\]]*\]\]`?\s*$/i,'').replace(/\s*`?\[\[[^\]]*$/,'').trimEnd();
@@ -1126,7 +1087,7 @@
         throw e;
       }
       if (OCULTAR.has(code)) {
-        sample = null; setModo('ausente');
+        sample = null;
         b.remove();
         throw e;
       }
@@ -1374,16 +1335,16 @@
     if (n === 1) S.fracTempo.decisao = (Desafio.ativo && Desafio.ativo.id === 'decisao') ? Desafio.parar() : 0;
     Voz.pararOuvir();
     const chat = document.getElementById('chat-decisao');
-    bolha(chat, 'aluno', 'AD 07:00: ' + ad7 + ' ft. AD 14:00: ' + ad14 + ' ft. Janela: ' + janela + '. ' + just);
+    bolha(chat, 'aluno', 'AD 07:00: ' + ad7 + ' ft. AD 14:00: ' + ad14 + ' ft. Slot: ' + janela + '. ' + just);
     registrar('decisao', 'tentativa ' + n, janela + ' · ' + ad7 + '/' + ad14);
     const ok7 = Math.abs(ad7 - REF.ad7) <= REF.tol, ok14 = Math.abs(ad14 - REF.ad14) <= REF.tol;
     await sampleReady;
     let status = null;
     if (sample) {
-      const cabeca = regrasBase() + '\n\nPAPEL: comandante instrutor, sóbrio e direto. Trata o aluno por "você".\n\nTAREFA: conferir a decisão do aluno. Valores de referência calculados pela página: ISA a 2.000 ft = 11 °C; 07:00 = ISA +7, AD ≈ 2.840 ft; 14:00 = ISA +23, AD ≈ 4.760 ft; tolerância ±220 ft. Janela recomendada: 07:00.\nA página já conferiu os números do aluno: AD 07:00 ' + (ok7 ? 'dentro' : 'fora') + ' da tolerância; AD 14:00 ' + (ok14 ? 'dentro' : 'fora') + ' da tolerância.\n\nVEREDITO: se os dois números estão dentro da tolerância, a janela é 07:00 e a justificativa liga calor a menor densidade e a mais pista, aceite em até três frases, ligue à corrida de quase 200 m a mais da lição e termine com [[STATUS:aceita]]. Se um número está fora, pergunte qual passo ele usou (ISA local, desvio, ×120) e dê UMA dica sobre o passo provável, sem dar o resultado; termine com [[STATUS:revisar]]. Se os números estão certos e ele escolheu 14:00, pergunte o que 4.800 ft sentidos fazem com uma pista de 900 m; termine com [[STATUS:revisar]]. Na terceira tentativa, mostre a conta completa e a janela, e termine com [[STATUS:explicado]].';
+      const cabeca = regrasBase() + '\n\nPAPEL: comandante instrutor, sóbrio e direto. Trata o aluno por "você".\n\nTAREFA: conferir a decisão do aluno. Valores de referência calculados pela página: ISA a 2.000 ft = 11 °C; 07:00 = ISA +7, AD ≈ 2.840 ft; 14:00 = ISA +23, AD ≈ 4.760 ft; tolerância ±220 ft. Slot recomendado: 07:00.\nA página já conferiu os números do aluno: AD 07:00 ' + (ok7 ? 'dentro' : 'fora') + ' da tolerância; AD 14:00 ' + (ok14 ? 'dentro' : 'fora') + ' da tolerância.\n\nVEREDITO: se os dois números estão dentro da tolerância, o slot é 07:00 e a justificativa liga calor a menor densidade e a mais pista, aceite em até três frases, ligue à corrida de quase 200 m a mais da lição e termine com [[STATUS:aceita]]. Se um número está fora, pergunte qual passo ele usou (ISA local, desvio, ×120) e dê UMA dica sobre o passo provável, sem dar o resultado; termine com [[STATUS:revisar]]. Se os números estão certos e ele escolheu 14:00, pergunte o que 4.800 ft sentidos fazem com uma pista de 900 m; termine com [[STATUS:revisar]]. Na terceira tentativa, mostre a conta completa e o slot, e termine com [[STATUS:explicado]].';
       const turns = [{role:'user', content: cabeca}];
       for (const h of S.historico.decisao) { turns.push({role:'user', content: h.aluno}); turns.push({role:'assistant', content: h.agente}); }
-      const ultima = 'Tentativa ' + n + (n >= 3 ? ' (terceira e última: mostre a conta completa e termine com [[STATUS:explicado]])' : '') + '. AD 07:00 = ' + ad7 + ' ft; AD 14:00 = ' + ad14 + ' ft; janela ' + janela + '. Justificativa: "' + just + '"';
+      const ultima = 'Tentativa ' + n + (n >= 3 ? ' (terceira e última: mostre a conta completa e termine com [[STATUS:explicado]])' : '') + '. AD 07:00 = ' + ad7 + ' ft; AD 14:00 = ' + ad14 + ' ft; slot ' + janela + '. Justificativa: "' + just + '"';
       turns.push({role:'user', content: ultima});
       try {
         const r = await falar({papel:'comandante', turns, chat});
@@ -1414,7 +1375,7 @@
     }
   });
   function modeloDecisao(chat, certo){
-    const b = bolha(chat, 'comandante', (certo ? 'Decisão coerente. ' : 'Confira a conta. ') + 'ISA a 2.000 ft é 11 °C. Às 07:00, 18 °C, o dia é ISA +7: 2.000 + 7 × 120 ≈ 2.840 ft. Às 14:00, 34 °C, ISA +23: 2.000 + 23 × 120 ≈ 4.760 ft. Mesma pista, mesma aeronave, e à tarde ela decola como se estivesse a 4.800 ft. A janela é 07:00.');
+    const b = bolha(chat, 'comandante', (certo ? 'Decisão coerente. ' : 'Confira a conta. ') + 'ISA a 2.000 ft é 11 °C. Às 07:00, 18 °C, o dia é ISA +7: 2.000 + 7 × 120 ≈ 2.840 ft. Às 14:00, 34 °C, ISA +23: 2.000 + 23 × 120 ≈ 4.760 ft. Mesma pista, mesma aeronave, e à tarde ela decola como se estivesse a 4.800 ft. O slot é 07:00.');
     veredito(b, 'autoestudo');
     return 'autoestudo';
   }
@@ -1528,7 +1489,7 @@
       for (const h of S.historico[id]) { L.push('  Aluno: ' + h.aluno.slice(0,400)); L.push('  Comandante: ' + limparMarcador(h.agente).slice(0,300)); }
       L.push('  Veredito final: ' + (S.status[id] || 'nenhum') + ' em ' + S.tentativas[id] + ' tentativa(s)');
     }
-    if (S.decisao) L.push('Decisão: AD 07:00 = ' + S.decisao.ad7 + ' ft (ref. 2.840); AD 14:00 = ' + S.decisao.ad14 + ' ft (ref. 4.760); janela ' + S.decisao.janela + ' (ref. 07:00). Justificativa: "' + S.decisao.just.slice(0,400) + '". Veredito: ' + S.status.decisao + ' em ' + S.tentativas.decisao + ' tentativa(s).');
+    if (S.decisao) L.push('Decisão: AD 07:00 = ' + S.decisao.ad7 + ' ft (ref. 2.840); AD 14:00 = ' + S.decisao.ad14 + ' ft (ref. 4.760); slot ' + S.decisao.janela + ' (ref. 07:00). Justificativa: "' + S.decisao.just.slice(0,400) + '". Veredito: ' + S.status.decisao + ' em ' + S.tentativas.decisao + ' tentativa(s).');
     else L.push('Decisão: ' + (S.status.decisao || 'não enviada'));
     L.push('Conversa com o copiloto novato:');
     for (const h of S.historico.novato) L.push('  ' + (h.quem === 'aluno' ? 'Aluno' : 'Novato') + ': ' + limparMarcador(h.texto).slice(0,400));
@@ -1561,7 +1522,7 @@
     const rev = Array.isArray(d.revisar) ? d.revisar.map(r => '<li><b>' + esc(r.quando || '') + ':</b> ' + esc(r.o_que || '') + '</li>').join('') : '';
     out.innerHTML =
       '<div class="debrief revelar">' +
-        '<div><h4>Explicação ao copiloto</h4>' + (d.nota_explicacao != null ? '<span class="nota">' + esc(d.nota_explicacao) + '</span> <span style="color:var(--muted)">de 5</span>' : '<span style="color:var(--muted)">sem nota no modo autoestudo</span>') + '<p style="margin:8px 0 0;font-weight:600">' + esc(d.frase_para_levar || '') + '</p></div>' +
+        '<div><h4>Explicação ao copiloto</h4>' + (d.nota_explicacao != null ? '<span class="nota">' + esc(d.nota_explicacao) + '</span> <span style="color:var(--muted)">de 5</span>' : '<span style="color:var(--muted)">sem nota</span>') + '<p style="margin:8px 0 0;font-weight:600">' + esc(d.frase_para_levar || '') + '</p></div>' +
         '<div><h4>Pontos fortes</h4><ul>' + li(d.pontos_fortes) + '</ul></div>' +
         '<div><h4>Lacunas</h4><ul>' + li(d.lacunas) + '</ul></div>' +
         '<div><h4>Revisar</h4><ul>' + (rev || '<li>nada agendado</li>') + '</ul></div>' +

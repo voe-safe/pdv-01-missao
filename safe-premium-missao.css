@@ -78,6 +78,31 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
   white-space: nowrap;
 }
 .topo-edicao span { color: #60c0bf; padding: 0 5px; }
+.topo-direita { display: flex; align-items: center; justify-content: flex-end; gap: 18px; }
+.mic-controle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 6px 10px;
+  border: 1px solid rgba(96,192,191,.45);
+  border-radius: 6px;
+  background: rgba(96,192,191,.11);
+  color: #c9f2ec;
+  font: 650 10px/1.2 var(--font-body);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+.mic-controle::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #60c0bf; box-shadow: 0 0 0 3px rgba(96,192,191,.16); }
+.mic-controle:hover { background: rgba(96,192,191,.2); border-color: #60c0bf; }
+.mic-controle[aria-pressed="false"] { color: rgba(255,255,255,.66); border-color: rgba(255,255,255,.23); background: rgba(255,255,255,.04); }
+.mic-controle[aria-pressed="false"]::before { background: #8b94a5; box-shadow: none; }
+.mic-controle:disabled { opacity: .55; cursor: not-allowed; }
+.mic-controle:focus-visible { outline: 2px solid #5baee2; outline-offset: 3px; }
 .topo-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(330px, 390px);
@@ -208,18 +233,15 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
   .cenario-base span:last-child { display: none; }
 }
 
-/* Faixas de estado e orientação. */
-.estado, .orientacao, .retomada, .grade, .bastidores, footer { max-width: 1168px; }
-.estado { margin-top: 22px; }
-.estado-in, .orientacao-in, .retomada-in {
+/* Faixas de orientação. */
+.orientacao, .retomada, .grade, .bastidores, footer { max-width: 1168px; }
+.orientacao-in, .retomada-in {
   box-shadow: none;
   background: var(--surface);
   border-color: var(--line);
   border-radius: 12px;
 }
-.estado-in { padding: 12px 16px; }
-.estado p { font-size: 13px; }
-.led { width: 7px; height: 7px; margin-top: 0; }
+.aviso-mic { max-width: 1120px; margin: 12px auto 0; padding: 10px 14px; border: 1px solid rgba(165,104,30,.3); border-radius: 8px; background: #fff8ed; color: #704913; font-size: 13px; }
 .orientacao { margin-top: 12px; }
 .orientacao-in { border-left: 3px solid #2864dc; padding: 16px 18px; }
 .orientacao-kicker { color: #2e7877; font-size: 10px; }
@@ -320,7 +342,6 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
 .btn.sec:hover { background: #f7f8f7; border-color: rgba(7,17,38,.25); }
 .btn.sec[aria-pressed="true"] { background: #071126; border-color: #071126; }
 .btn.sec.lig[aria-pressed="true"] { background: #e7f4f1; border-color: #bbded9; color: #225f5e; }
-#btnMicrofone { min-width: 124px; white-space: nowrap; }
 .btn.mini { padding: 7px 10px; font-size: 11px; }
 .btn.teal { background: #2864dc; color: #fff; }
 .btn.teal:hover { background: #1f53b8; }
@@ -346,7 +367,7 @@ footer { border-top: 1px solid var(--line); padding-top: 22px; }
 }
 @media (max-width: 640px) {
   .topo { padding: 0 20px 20px; }
-  .topo-barra { align-items: flex-start; gap: 12px; }
+  .topo-barra { gap: 12px; }
   .topo-marca { gap: 10px; }
   .marca { width: 104px; }
   .topo-divisor { height: 22px; }
@@ -365,9 +386,8 @@ footer { border-top: 1px solid var(--line); padding-top: 22px; }
   .cenario-janela strong { font-size: 18px; }
   .cenario-barra { margin-top: 3px; }
   .cenario-base { grid-column: 1 / -1; padding-top: 8px; font-size: 8px; }
-  .estado, .orientacao, .retomada, .grade, .bastidores, footer { padding-left: 16px; padding-right: 16px; }
-  .estado-in { align-items: flex-start; flex-wrap: wrap; }
-  .controles { width: 100%; margin-left: 0; }
+  .orientacao, .retomada, .grade, .bastidores, footer { padding-left: 16px; padding-right: 16px; }
+  .aviso-mic { margin-left: 16px; margin-right: 16px; }
   .grade { gap: 20px; }
   .trilha { padding-left: 29px; }
   .trilha::before { left: 10px; }
@@ -386,6 +406,8 @@ footer { border-top: 1px solid var(--line); padding-top: 22px; }
   .topo { padding-bottom: 15px; }
   .topo-barra { padding: 9px 0; }
   .marca { width: 96px; }
+  .topo-produto, .topo-divisor { display: none; }
+  .mic-controle { font-size: 9px; padding: 6px 8px; }
   .topo-hero { gap: 13px; padding-top: 15px; }
   .topo h1 { font-size: clamp(34px, 9vw, 39px); }
   .topo .sub { margin-top: 7px; font-size: 12.5px; }
