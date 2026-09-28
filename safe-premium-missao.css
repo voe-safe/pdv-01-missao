@@ -32,7 +32,7 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: 0 24px 44px;
+  padding: 0 24px 27px;
   border-top: 2px solid #2864dc;
   background: #071126;
 }
@@ -63,11 +63,11 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 19px 0 18px;
+  padding: 11px 0 12px;
   border-bottom: 1px solid rgba(255,255,255,.14);
 }
 .topo-marca { display: flex; align-items: center; gap: 16px; min-width: 0; }
-.marca { width: 118px; height: auto; flex: 0 0 auto; }
+.marca { width: 108px; height: auto; flex: 0 0 auto; }
 .topo-divisor { height: 26px; width: 1px; background: rgba(255,255,255,.21); }
 .topo-produto, .topo-edicao {
   color: rgba(255,255,255,.63);
@@ -78,7 +78,14 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
   white-space: nowrap;
 }
 .topo-edicao span { color: #60c0bf; padding: 0 5px; }
-.topo-hero { padding: 38px 0 0; max-width: 780px; }
+.topo-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(330px, 390px);
+  align-items: center;
+  gap: clamp(25px, 5vw, 70px);
+  padding: 22px 0 0;
+}
+.topo-copy { min-width: 0; }
 .topo .eyebrow {
   display: flex;
   align-items: center;
@@ -91,37 +98,115 @@ h1, h2, h3, h4 { letter-spacing: -.025em; }
 .topo .eyebrow::before { content: ""; width: 22px; height: 2px; background: #5baee2; }
 .topo .eyebrow span { color: rgba(255,255,255,.35); }
 .topo h1 {
-  margin-top: 15px;
+  margin-top: 10px;
   color: #fff;
-  font-size: clamp(38px, 5.3vw, 64px);
+  font-size: clamp(38px, 4.2vw, 50px);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -.045em;
 }
 .topo h1 span { color: #7fb5ec; }
 .topo .sub {
-  max-width: 62ch;
-  margin-top: 17px;
+  max-width: 47ch;
+  margin: 11px 0 0;
   color: rgba(255,255,255,.69);
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 14px;
+  line-height: 1.55;
 }
+.topo-acoes { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 15px; margin-top: 15px; }
+.topo-iniciar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 9px 12px;
+  border-radius: 7px;
+  background: #5baee2;
+  color: #071126;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .18s ease, transform .18s ease;
+}
+.topo-iniciar:hover { background: #8ac8ed; transform: translateY(-2px); }
+.topo-iniciar span { font-size: 15px; font-weight: 400; }
 .chips {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,.18);
-  gap: 7px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  gap: 6px;
 }
 .chip-topo {
-  padding: 5px 8px;
+  padding: 5px 7px;
   border: 0;
   border-radius: 5px;
   background: rgba(255,255,255,.075);
   color: rgba(255,255,255,.8);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 550;
 }
 .chip-topo.vivo { color: #88d9d3; background: rgba(96,192,191,.12); }
+.topo-cenario {
+  min-width: 0;
+  padding: 16px 18px 13px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-left: 2px solid #60c0bf;
+  border-radius: 11px;
+  background: rgba(255,255,255,.045);
+  box-shadow: 0 14px 34px rgba(0,0,0,.12);
+}
+.cenario-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+.cenario-cab span, .cenario-base {
+  color: rgba(255,255,255,.54);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.cenario-cab strong { color: rgba(255,255,255,.85); font-size: 11px; font-weight: 600; }
+.cenario-janela {
+  display: grid;
+  grid-template-columns: 54px 64px minmax(0,1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+.cenario-hora { color: rgba(255,255,255,.65); font: 600 12px/1 var(--font-mono); }
+.cenario-janela strong { color: #fff; font-size: 19px; font-weight: 650; letter-spacing: -.04em; white-space: nowrap; }
+.cenario-barra { display: block; height: 4px; border-radius: 3px; background: rgba(255,255,255,.12); }
+.cenario-barra i { display: block; height: 100%; border-radius: inherit; transform-origin: left; animation: cenario-entrar .7s ease-out both; }
+.cenario-janela.manha .cenario-barra i { width: 53%; background: #60c0bf; }
+.cenario-janela.tarde .cenario-barra i { width: 100%; background: #e3a453; animation-delay: .12s; }
+@keyframes cenario-entrar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.cenario-base { display: flex; justify-content: space-between; gap: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.12); letter-spacing: .1em; }
+.cenario-base strong { color: #fff; font-size: 11px; }
+@media (prefers-reduced-motion: reduce) {
+  .cenario-barra i { animation: none; }
+  .topo-iniciar { transition: none; }
+}
+@media (max-width: 860px) {
+  .topo-hero { grid-template-columns: 1fr; gap: 20px; }
+  .topo-cenario { max-width: none; }
+}
+@media (min-width: 1160px) {
+  .topo h1 { font-size: 46px; white-space: nowrap; }
+  .topo h1 br { display: none; }
+}
+@media (min-width: 521px) and (max-width: 860px) {
+  .topo-hero { grid-template-columns: minmax(0, 1fr) 220px; gap: 17px; }
+  .topo h1 { font-size: clamp(29px, 5.2vw, 37px); }
+  .topo .sub { font-size: 12px; line-height: 1.48; }
+  .chips { display: none; }
+  .topo-cenario { padding: 11px 12px; }
+  .cenario-cab { display: block; }
+  .cenario-cab strong { display: block; margin-top: 3px; }
+  .cenario-janela { grid-template-columns: 39px 48px minmax(0,1fr); gap: 7px; }
+  .cenario-janela strong { font-size: 16px; }
+  .cenario-base span:last-child { display: none; }
+}
 
 /* Faixas de estado e orientação. */
 .estado, .orientacao, .retomada, .grade, .bastidores, footer { max-width: 1168px; }
@@ -259,16 +344,26 @@ footer { border-top: 1px solid var(--line); padding-top: 22px; }
   .painel { position: static; }
 }
 @media (max-width: 640px) {
-  .topo { padding: 0 20px 31px; }
+  .topo { padding: 0 20px 20px; }
   .topo-barra { align-items: flex-start; gap: 12px; }
   .topo-marca { gap: 10px; }
   .marca { width: 104px; }
   .topo-divisor { height: 22px; }
   .topo-produto { font-size: 9px; white-space: normal; }
   .topo-edicao { display: none; }
-  .topo-hero { padding-top: 30px; }
-  .topo h1 { font-size: clamp(37px, 11vw, 52px); }
-  .topo .sub { font-size: 14px; }
+  .topo-hero { gap: 17px; padding-top: 19px; }
+  .topo h1 { font-size: clamp(32px, 5.2vw, 37px); }
+  .topo .sub { margin-top: 9px; font-size: 13px; }
+  .topo-acoes { gap: 9px; margin-top: 12px; }
+  .topo-iniciar { padding: 8px 10px; }
+  .chips { gap: 5px; }
+  .topo-cenario { display: grid; grid-template-columns: 1fr 1fr; gap: 0 13px; padding: 10px 13px; }
+  .cenario-cab { grid-column: 1 / -1; margin-bottom: 5px; }
+  .cenario-cab span { font-size: 8px; }
+  .cenario-janela { display: grid; grid-template-columns: 1fr; gap: 4px; padding: 7px 0; }
+  .cenario-janela strong { font-size: 18px; }
+  .cenario-barra { margin-top: 3px; }
+  .cenario-base { grid-column: 1 / -1; padding-top: 8px; font-size: 8px; }
   .estado, .orientacao, .retomada, .grade, .bastidores, footer { padding-left: 16px; padding-right: 16px; }
   .estado-in { align-items: flex-start; flex-wrap: wrap; }
   .controles { width: 100%; margin-left: 0; }
@@ -285,4 +380,21 @@ footer { border-top: 1px solid var(--line); padding-top: 22px; }
   .dados-grid > div { min-width: 0; overflow-wrap: anywhere; }
   .numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .num .val { font-size: 17px; }
+}
+@media (max-width: 520px) {
+  .topo { padding-bottom: 15px; }
+  .topo-barra { padding: 9px 0; }
+  .marca { width: 96px; }
+  .topo-hero { gap: 13px; padding-top: 15px; }
+  .topo h1 { font-size: clamp(34px, 9vw, 39px); }
+  .topo .sub { margin-top: 7px; font-size: 12.5px; }
+  .topo-acoes { margin-top: 10px; }
+  .chips { display: none; }
+  .topo-cenario { padding: 8px 11px 9px; }
+  .cenario-cab { display: block; grid-column: 1 / -1; margin-bottom: 5px; }
+  .cenario-cab strong, .cenario-base { display: none; }
+  .cenario-janela { grid-template-columns: auto auto; align-items: baseline; gap: 3px 6px; padding: 2px 0; border-top: 0; }
+  .cenario-hora { font-size: 10px; }
+  .cenario-janela strong { font-size: 17px; }
+  .cenario-barra { grid-column: 1 / -1; margin-top: 2px; }
 }
