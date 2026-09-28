@@ -1,0 +1,1651 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Missão PDV-01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --navy:#1D2951; --blue:#5BAEE2; --teal:#60C0BF; --sage:#80B8B8;
+    --paper:#F5F7FB; --surface:#FFFFFF; --wash:#EEF2F8; --wash-2:#E4EAF4;
+    --ink:#1C2440; --muted:#5C6683; --faint:#8A93AC; --line:#D9E0EC;
+    --blue-ink:#2A6FA8; --teal-ink:#1F7A79; --amber:#B8781A; --amber-bg:#FBF3E4;
+    --alerta:#B23A32; --alerta-bg:#FBEFEE; --ok-bg:#E6F5F4;
+    --aluno-bg:#E7F2FB; --topo:#1D2951; --topo-ink:#FFFFFF; --topo-sub:rgba(255,255,255,.72);
+    --sombra:0 1px 2px rgba(29,41,81,.06), 0 8px 24px -12px rgba(29,41,81,.18);
+    --font-title:'Montserrat','Segoe UI',Arial,sans-serif;
+    --font-body:'Inter','Segoe UI',Arial,sans-serif;
+    --font-mono:ui-monospace,'Cascadia Mono',Consolas,'Courier New',monospace;
+    --r:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0F1729; --surface:#172238; --wash:#1C2A44; --wash-2:#223352;
+      --ink:#E8EDF7; --muted:#A3B1CB; --faint:#7F8DA8; --line:#2A3852;
+      --blue-ink:#8CC8F0; --teal-ink:#7ED3D2; --amber:#E2B15C; --amber-bg:#2E2718;
+      --alerta:#F08A82; --alerta-bg:#3A1F1E; --ok-bg:#16302F;
+      --aluno-bg:#1B2E45; --topo:#121C38;
+      --sombra:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0F1729; --surface:#172238; --wash:#1C2A44; --wash-2:#223352;
+    --ink:#E8EDF7; --muted:#A3B1CB; --faint:#7F8DA8; --line:#2A3852;
+    --blue-ink:#8CC8F0; --teal-ink:#7ED3D2; --amber:#E2B15C; --amber-bg:#2E2718;
+    --alerta:#F08A82; --alerta-bg:#3A1F1E; --ok-bg:#16302F;
+    --aluno-bg:#1B2E45; --topo:#121C38;
+    --sombra:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--font-title);color:var(--ink);text-wrap:balance;margin:0}
+  p{margin:0 0 .8em}
+  button{font:inherit}
+  a{color:var(--blue-ink)}
+  :focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* Topo */
+  .topo{background:var(--topo);color:var(--topo-ink);padding:26px 24px 24px}
+  .topo-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+  .marca{width:148px;height:auto;display:block}
+  .eyebrow{font:700 11px/1.2 var(--font-body);letter-spacing:.18em;text-transform:uppercase;color:var(--teal)}
+  .topo h1{color:#fff;font-size:clamp(24px,3.2vw,34px);font-weight:800;line-height:1.15;margin-top:6px}
+  .topo .sub{color:var(--topo-sub);margin:8px 0 0;max-width:68ch}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip-topo{font:600 12px/1 var(--font-body);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:7px 11px}
+  .chip-topo.vivo{border-color:var(--teal);color:var(--teal)}
+  @media (max-width:640px){.topo-in{grid-template-columns:1fr;gap:16px}.marca{width:120px}}
+
+  /* Faixa de estado do agente */
+  .estado{max-width:1180px;margin:16px auto 0;padding:0 24px}
+  .estado-in{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;box-shadow:var(--sombra)}
+  .led{flex:0 0 auto;width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--faint)}
+  .estado[data-modo="pronto"] .led{background:var(--teal)}
+  .estado[data-modo="ausente"] .led{background:var(--amber)}
+  .estado[data-modo="verificando"] .led{background:var(--blue);animation:pulsa 1.2s ease-in-out infinite}
+  @keyframes pulsa{0%,100%{opacity:1}50%{opacity:.35}}
+  .estado b{color:var(--ink)}
+  .estado p{margin:0;color:var(--muted);font-size:14.5px}
+
+  /* Orientação da missão */
+  .orientacao{max-width:1180px;margin:16px auto 0;padding:0 24px}
+  .orientacao-in{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:var(--wash);border:1px solid var(--line);border-radius:var(--r);padding:13px 16px}
+  .orientacao-kicker{font:700 10.5px/1.2 var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink)}
+  .orientacao-titulo{font:700 15px/1.35 var(--font-body);margin:3px 0 0}
+  .orientacao-titulo b{color:var(--navy)}
+  .progresso-wrap{min-width:210px;text-align:right}
+  .progresso-wrap span{font:600 12px/1.2 var(--font-body);color:var(--muted)}
+  .progresso-trilha{height:8px;overflow:hidden;background:var(--wash-2);border-radius:999px;margin-top:7px}
+  .progresso-trilha i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .5s ease}
+  .retomada{max-width:1180px;margin:12px auto 0;padding:0 24px}
+  .retomada-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--amber-bg);border:1px solid color-mix(in srgb,var(--amber) 35%,var(--line));border-radius:var(--r);padding:12px 16px}
+  .retomada-in p{flex:1;min-width:220px;margin:0;color:var(--ink);font-size:14px}
+  @media (max-width:640px){.orientacao-in{grid-template-columns:1fr}.progresso-wrap{text-align:left}.retomada-in{align-items:flex-start}}
+
+  /* Grade principal */
+  .grade{max-width:1180px;margin:20px auto 60px;padding:0 24px;display:grid;grid-template-columns:minmax(0,1fr) 312px;gap:28px;align-items:start}
+  @media (max-width:980px){.grade{grid-template-columns:1fr}.painel{position:static !important}}
+
+  /* Trilha */
+  .trilha{position:relative;padding-left:44px}
+  .trilha::before{content:"";position:absolute;left:15px;top:14px;bottom:14px;width:2px;background:var(--line)}
+  .etapa{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:18px;box-shadow:var(--sombra)}
+  .etapa .marcador{position:absolute;left:-44px;top:18px;width:32px;height:32px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;font:700 13px/1 var(--font-title);color:var(--muted)}
+  .etapa.is-open .marcador{border-color:var(--navy);color:var(--navy)}
+  :root[data-theme="dark"] .etapa.is-open .marcador{border-color:var(--blue);color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .etapa.is-open .marcador{border-color:var(--blue);color:var(--blue)}}
+  .etapa.is-done .marcador{background:var(--teal);border-color:var(--teal);color:#0E2A2A}
+  .etapa.is-done .marcador::after{content:"✓"}
+  .etapa.is-done .marcador span{display:none}
+  .etapa-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:18px 22px 0}
+  .etapa-cab .eyebrow{color:var(--teal-ink)}
+  .etapa h2{font-size:20px;font-weight:700;margin-top:4px}
+  .etapa .dur{flex:0 0 auto;font:600 12px/1 var(--font-body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .etapa-corpo{padding:14px 22px 22px}
+  .etapa.is-locked .etapa-corpo{display:none}
+  .etapa.is-locked{opacity:.72}
+  .etapa.is-locked .etapa-cab{padding-bottom:16px}
+  .etapa.is-locked .dur::before{content:"bloqueada · "}
+  .etapa-corpo > p, .conteudo p{max-width:68ch}
+  .revelar{animation:sobe .28s ease-out both}
+  @keyframes sobe{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.revelar{animation:none}.estado .led{animation:none}.cursor{animation:none}}
+
+  /* Faixa operacional */
+  .dados{font:500 13px/1.6 var(--font-mono);background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;color:var(--ink);margin:6px 0 14px}
+  .dados .k{color:var(--muted)}
+  .dados .v{font-weight:700}
+  .dados-grid{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:4px 20px;min-width:480px}
+
+  /* Conteúdo */
+  .conteudo{border-left:3px solid var(--teal);padding:2px 0 2px 16px;margin:8px 0 18px}
+  .conteudo h3{font-size:15px;margin-bottom:8px}
+  .numeros{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 14px}
+  @media (max-width:720px){.numeros{grid-template-columns:repeat(2,1fr)}}
+  .num{background:var(--wash);border-radius:8px;padding:12px 12px 10px}
+  .num .val{font:800 22px/1.1 var(--font-title);color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  :root[data-theme="dark"] .num .val{color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .num .val{color:var(--blue)}}
+  .num .lab{font:500 12px/1.35 var(--font-body);color:var(--muted);margin-top:4px}
+  .aviso{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0 14px;font-size:15px}
+  .aviso b{color:var(--amber)}
+  .frase{font:700 18px/1.3 var(--font-title);color:var(--navy);margin:8px 0 12px}
+  :root[data-theme="dark"] .frase{color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .frase{color:var(--blue)}}
+  .tres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 14px}
+  @media (max-width:720px){.tres{grid-template-columns:1fr}}
+  .tres div{background:var(--wash);border-radius:8px;padding:12px 14px;font-size:14.5px}
+  .tres b{display:block;font-family:var(--font-title);color:var(--ink);margin-bottom:4px}
+  table.mini{border-collapse:collapse;font-size:13.5px;margin:8px 0 14px;font-variant-numeric:tabular-nums}
+  table.mini th{font:600 11px/1.2 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:4px 12px 6px 0;border-bottom:1px solid var(--line)}
+  table.mini td{text-align:right;padding:4px 12px 4px 0;border-bottom:1px solid var(--line)}
+  table.mini th:first-child,table.mini td:first-child{text-align:left}
+  figure{margin:8px 0 14px}
+  figure svg{width:100%;max-width:560px;height:auto;display:block}
+  figcaption{font-size:13px;color:var(--muted);margin-top:4px}
+  .ex{background:var(--wash);border-radius:8px;padding:12px 14px;font-size:14.5px;margin:8px 0 14px}
+  .ex ol{margin:6px 0 0 18px;padding:0}
+  .ex li{margin-bottom:2px}
+
+  /* Pergunta e chat */
+  .pergunta{background:var(--wash);border-radius:var(--r);padding:14px 16px;margin-top:6px}
+  .pergunta .eyebrow{color:var(--navy)}
+  :root[data-theme="dark"] .pergunta .eyebrow{color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pergunta .eyebrow{color:var(--blue)}}
+  .pergunta .q{font:600 16px/1.45 var(--font-body);margin:6px 0 10px;max-width:68ch}
+  .chat{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+  .bolha{max-width:92%;border-radius:12px;padding:10px 14px 12px;position:relative}
+  .bolha-agente{align-self:flex-start;background:var(--surface);border:1px solid var(--line)}
+  .bolha-aluno{align-self:flex-end;background:var(--aluno-bg)}
+  .bolha .chip{display:inline-block;font:700 10.5px/1 var(--font-title);letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 8px;margin-bottom:6px;color:#fff;background:var(--navy)}
+  .bolha[data-papel="despachante"] .chip{background:var(--muted)}
+  .bolha[data-papel="novato"] .chip{background:var(--teal);color:#0E2A2A}
+  .bolha[data-papel="aluno"] .chip{background:var(--blue-ink)}
+  .bolha[data-papel="sistema"] .chip{background:var(--amber);color:#2A1D05}
+  .bolha .fala{margin:0;white-space:pre-wrap;font-size:15.5px}
+  .bolha .fala.pensando{color:var(--muted);font-style:italic}
+  .cursor{display:inline-block;width:2px;height:1em;background:var(--blue);vertical-align:-2px;margin-left:2px;animation:pulsa .9s steps(2) infinite}
+  .bolha-acoes{margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .veredito{font:700 11px/1 var(--font-body);letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:5px 9px;background:var(--wash-2);color:var(--muted)}
+  .veredito[data-s="correto"],.veredito[data-s="aceita"]{background:var(--ok-bg);color:var(--teal-ink)}
+  .veredito[data-s="parcial"],.veredito[data-s="revisar"]{background:var(--amber-bg);color:var(--amber)}
+  .veredito[data-s="incorreto"]{background:var(--alerta-bg);color:var(--alerta)}
+  .veredito[data-s="explicado"]{background:var(--wash-2);color:var(--ink)}
+
+  /* Formulários */
+  .form{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  textarea,input[type=number]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+  textarea{min-height:76px;resize:vertical}
+  textarea:disabled,input:disabled{opacity:.6}
+  .linha{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{font:600 14.5px/1 var(--font-body);border-radius:999px;padding:11px 18px;border:1px solid transparent;cursor:pointer;background:var(--navy);color:#fff}
+  .btn:hover{filter:brightness(1.08)}
+  .btn:disabled{opacity:.55;cursor:default;filter:none}
+  .btn.sec{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn.sec:hover{background:var(--wash)}
+  .btn.sec[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .btn.mini{padding:7px 12px;font-size:13px}
+  .btn.teal{background:var(--teal);color:#0E2A2A}
+  .pular{font-size:13px;color:var(--muted);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .campos{display:grid;grid-template-columns:repeat(2,minmax(160px,1fr));gap:10px}
+  .campos label{display:flex;flex-direction:column;gap:4px;font:600 13px/1.3 var(--font-body);color:var(--muted)}
+  .campos label span.u{font-weight:400}
+  fieldset{border:0;padding:0;margin:0}
+  legend{font:600 13px/1.3 var(--font-body);color:var(--muted);margin-bottom:6px;padding:0}
+  .radios{display:flex;gap:8px;flex-wrap:wrap}
+  .radios label{border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+  .radios input{margin:0}
+  .radios label:has(input:checked){background:var(--navy);color:#fff;border-color:var(--navy)}
+  .erro{color:var(--alerta);font-size:14px}
+
+  /* Régua de decisão */
+  .regua{margin:12px 0 4px}
+  .regua .barra{display:grid;grid-template-columns:130px 1fr 92px;gap:10px;align-items:center;margin:6px 0;font-size:14px}
+  .regua .rot{font-weight:600;color:var(--muted)}
+  .regua .tr{height:14px;background:var(--wash-2);border-radius:999px;overflow:hidden}
+  .regua .fill{height:100%;border-radius:999px;background:var(--navy)}
+  .regua .fill.t{background:var(--teal)}
+  .regua .fill.a{background:var(--amber)}
+  .regua .n{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+
+  /* Mapa operacional da decisão */
+  .mapa-operacional{background:var(--wash);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:14px 0}
+  .mapa-cab{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+  .mapa-cab h3{font-size:15px;margin:0}.mapa-cab p{font-size:13.5px;color:var(--muted);margin:3px 0 0;max-width:60ch}
+  .mapa-toggle{display:flex;gap:6px}.mapa-toggle .btn{padding:7px 11px;font-size:13px}
+  .mapa-leitura{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0 12px}
+  .mapa-dado{background:var(--surface);border-radius:8px;padding:9px 10px}.mapa-dado span{display:block;font:600 10px/1.2 var(--font-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.mapa-dado b{display:block;font:800 17px/1.2 var(--font-title);color:var(--navy);margin-top:3px;font-variant-numeric:tabular-nums}
+  .pista-mapa{position:relative;background:#293957;border-radius:6px;min-height:94px;overflow:hidden;padding:10px 18px;color:#fff}
+  .pista-mapa::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.85) 0 22px,transparent 22px 38px)}
+  .pista-mapa::after{content:"900 m de pista";position:absolute;right:12px;bottom:8px;font:600 10.5px/1 var(--font-body);letter-spacing:.08em;color:rgba(255,255,255,.72)}
+  .pista-aviao{position:absolute;left:12px;top:37px;width:28px;height:18px;z-index:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}.pista-aviao::before{content:"";position:absolute;left:8px;top:0;width:11px;height:18px;background:var(--teal);clip-path:polygon(50% 0,100% 100%,50% 78%,0 100%)}.pista-aviao::after{content:"";position:absolute;left:0;top:7px;width:28px;height:5px;background:var(--teal);clip-path:polygon(0 45%,100% 0,100% 100%)}
+  .pista-corrida{position:absolute;left:45px;top:64px;height:6px;width:57%;border-radius:999px;background:var(--teal);transition:width .55s ease,background .35s ease}.pista-corrida::after{content:"";position:absolute;right:-3px;top:-4px;width:13px;height:13px;border:2px solid currentColor;border-radius:50%;background:#293957;color:var(--teal)}
+  .pista-legenda{position:absolute;left:45px;top:11px;font:700 11px/1.2 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:#fff}.pista-nota{font-size:12.5px;color:var(--muted);margin:9px 0 0}.pista-nota b{color:var(--amber)}
+  .mapa-operacional[data-hora="14"] .pista-corrida{width:79%;background:var(--amber)}.mapa-operacional[data-hora="14"] .pista-corrida::after{color:var(--amber)}.mapa-operacional[data-hora="14"] .mapa-dado b{color:var(--amber)}
+  @media (max-width:600px){.mapa-leitura{grid-template-columns:1fr 1fr}.mapa-dado:last-child{grid-column:span 2}}
+
+  /* Debriefing */
+  .debrief{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 14px}
+  @media (max-width:720px){.debrief{grid-template-columns:1fr}}
+  .debrief div{background:var(--wash);border-radius:8px;padding:12px 14px;font-size:14.5px}
+  .debrief h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .debrief ul{margin:0;padding-left:18px}
+  .debrief li{margin-bottom:3px}
+  .nota{display:inline-block;font:800 26px/1 var(--font-title);color:var(--navy);font-variant-numeric:tabular-nums}
+  :root[data-theme="dark"] .nota{color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .nota{color:var(--blue)}}
+  .volta{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:8px 0 14px;font-size:14.5px}
+  .volta h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .volta ul{margin:0;padding-left:18px}
+  details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600}
+  .quiz-q{padding:10px 0;border-bottom:1px solid var(--line)}
+  .quiz-q:last-child{border-bottom:0}
+  .quiz-q p{font-weight:600;margin-bottom:6px}
+  .quiz-q label{display:block;padding:4px 0;font-size:15px}
+  .quiz-q .exp{font-size:14px;color:var(--muted);margin-top:6px}
+  .quiz-q .exp.ok{color:var(--teal-ink)}
+  .quiz-q .exp.nok{color:var(--alerta)}
+
+  /* Painel */
+  .painel{position:sticky;top:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sombra);padding:16px 18px}
+  .painel h3{font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+  .painel h4{font:700 11px/1.2 var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:14px}
+  .kv .v{font-variant-numeric:tabular-nums;font-weight:600;text-align:right;color:var(--ink)}
+  .kv .v.vazio{color:var(--faint);font-weight:500}
+  .kv .v.novo{color:var(--teal-ink)}
+  .passos{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+  .passos li{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+  .passos i{flex:0 0 auto;width:9px;height:9px;border-radius:50%;background:var(--line)}
+  .passos li.open{color:var(--ink);font-weight:600}
+  .passos li.open i{background:var(--navy)}
+  .passos li.done i{background:var(--teal)}
+  .painel .linha{margin-top:14px}
+  .tempo{font:600 13px/1 var(--font-mono);color:var(--muted)}
+
+  /* Bastidores */
+  .bastidores{max-width:1180px;margin:0 auto 60px;padding:0 24px}
+  .bast-in{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sombra);padding:22px}
+  .bast-in h2{font-size:20px}
+  .bast-in .eyebrow{color:var(--teal-ink)}
+  .bast-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+  @media (max-width:860px){.bast-grid{grid-template-columns:1fr}}
+  .bast-bloco h3{font-size:15px;margin-bottom:8px}
+  .bast-bloco p,.bast-bloco li{font-size:14.5px}
+  pre.regras{font:12.5px/1.5 var(--font-mono);background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:12px;white-space:pre-wrap;max-height:360px;overflow:auto;color:var(--ink);margin:0}
+  table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  table.log th{font:600 11px/1.2 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  table.log td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  .conf{width:100%;border-collapse:collapse;font-size:14px}
+  .conf th{font:600 11px/1.2 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  .conf td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+  select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+
+  /* Voz, som e jogo */
+  .estado-in{align-items:center}
+  .controles{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .btn.sec.lig[aria-pressed="true"]{background:var(--teal);color:#0E2A2A;border-color:var(--teal)}
+  .desafio-intro{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 4px}
+  .desafio-intro p{margin:0;color:var(--muted)}
+  .cronometro{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
+  .anel-wrap{position:relative;width:56px;height:56px;flex:0 0 auto}
+  .anel{width:56px;height:56px;transform:rotate(-90deg)}
+  .anel-fundo{fill:none;stroke:var(--wash-2);stroke-width:6}
+  .anel-prog{fill:none;stroke:var(--teal);stroke-width:6;stroke-linecap:round;stroke-dasharray:163.36;stroke-dashoffset:0;transition:stroke-dashoffset .1s linear,stroke .3s}
+  .anel-txt{position:absolute;inset:0;display:grid;place-items:center;font:800 16px/1 var(--font-title);color:var(--ink);font-variant-numeric:tabular-nums}
+  .cronometro .rot{font:600 12px/1.35 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .cronometro[data-nivel="alerta"] .anel-prog{stroke:var(--amber)}
+  .cronometro[data-nivel="critico"] .anel-prog{stroke:var(--alerta)}
+  .cronometro[data-nivel="critico"] .anel-txt{color:var(--alerta);animation:pulsa .5s steps(2) infinite}
+  .cronometro[data-nivel="esgotado"] .anel-prog{stroke:var(--faint)}
+  .cronometro.parado .anel-txt{opacity:.6;animation:none}
+  .carimbo{position:absolute;top:-12px;right:12px;font:800 11.5px/1 var(--font-title);letter-spacing:.14em;text-transform:uppercase;border:3px solid currentColor;border-radius:6px;padding:5px 8px;background:var(--surface);pointer-events:none;color:var(--muted);animation:carimbar .35s cubic-bezier(.2,.9,.3,1.2) both}
+  .carimbo[data-s="correto"],.carimbo[data-s="aceita"]{color:var(--teal-ink)}
+  .carimbo[data-s="parcial"],.carimbo[data-s="revisar"]{color:var(--amber)}
+  .carimbo[data-s="incorreto"]{color:var(--alerta)}
+  .carimbo[data-s="explicado"]{color:var(--ink)}
+  @keyframes carimbar{from{opacity:0;transform:rotate(-22deg) scale(2)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
+  .flut{position:absolute;font:800 14px/1 var(--font-title);color:var(--teal-ink);pointer-events:none;z-index:5;animation:flutuar 1.2s ease-out forwards}
+  @keyframes flutuar{from{opacity:0;transform:translateY(6px)}20%{opacity:1}to{opacity:0;transform:translateY(-36px)}}
+  .btn.mic{border-color:var(--blue-ink);color:var(--blue-ink)}
+  .btn.mic.ouvindo{background:var(--alerta);border-color:var(--alerta);color:#fff;animation:pulsa 1s ease-in-out infinite}
+  .dica-voz{font-size:12.5px;color:var(--muted)}
+  .datilo::after{content:"▌";color:var(--blue);animation:pulsa .8s steps(2) infinite}
+  .etapa.is-open .marcador{animation:abrir-marcador .7s ease-out}
+  @keyframes abrir-marcador{0%{box-shadow:0 0 0 0 rgba(91,174,226,.65)}100%{box-shadow:0 0 0 16px rgba(91,174,226,0)}}
+  .regua .fill{transition:width .9s ease-out}
+  .jogo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .jogo .tile{background:var(--wash);border-radius:8px;padding:10px 12px}
+  .jogo .lab{font:600 10.5px/1.2 var(--font-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .jogo .val{font:800 22px/1.1 var(--font-title);color:var(--navy);font-variant-numeric:tabular-nums;margin-top:2px}
+  :root[data-theme="dark"] .jogo .val{color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .jogo .val{color:var(--blue)}}
+  .prontidao{height:10px;background:var(--wash-2);border-radius:999px;overflow:hidden;margin-top:6px}
+  .prontidao i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:999px;transition:width .9s ease-out}
+  .cumprida{position:relative;border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin:6px 0 14px;background:var(--wash)}
+  .cumprida .carimbo-grande{display:inline-block;transform:rotate(-6deg);font:800 18px/1 var(--font-title);letter-spacing:.16em;text-transform:uppercase;border:4px solid var(--teal-ink);color:var(--teal-ink);border-radius:8px;padding:10px 14px;animation:carimbar .5s cubic-bezier(.2,.9,.3,1.2) both}
+  .cumprida .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+  @media (max-width:720px){.cumprida .stats{grid-template-columns:repeat(2,1fr)}}
+  .cumprida .stats div{background:var(--surface);border-radius:8px;padding:10px 12px}
+  .cumprida .stats .lab{font:600 10.5px/1.2 var(--font-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .cumprida .stats .val{font:800 22px/1.1 var(--font-title);color:var(--navy);font-variant-numeric:tabular-nums;margin-top:2px}
+  :root[data-theme="dark"] .cumprida .stats .val{color:var(--blue)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cumprida .stats .val{color:var(--blue)}}
+  .teste-som{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  @media (prefers-reduced-motion:reduce){.carimbo,.cumprida .carimbo-grande,.flut,.etapa.is-open .marcador,.btn.mic.ouvindo,.cronometro[data-nivel="critico"] .anel-txt{animation:none}.anel-prog,.prontidao i,.regua .fill{transition:none}}
+
+  footer{max-width:1180px;margin:0 auto;padding:0 24px 40px;color:var(--muted);font-size:13px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  footer svg{width:16px;height:auto}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-in">
+    <svg class="marca" role="img" aria-label="SAFE Escola de Aviação" xmlns="http://www.w3.org/2000/svg" viewBox="119 279 1680 494"><path fill="#FFFFFF" d="M 613.42 525.58 A 246.97 246.97 0.0 0 1 366.45 772.55 A 246.97 246.97 0.0 0 1 119.48 525.58 A 246.97 246.97 0.0 0 1 366.45 278.61 A 246.97 246.97 0.0 0 1 613.42 525.58 Z M 365.80 449.73 Q 370.05 443.06 375.40 438.63 C 388.73 427.59 400.42 420.88 420.78 410.51 Q 445.61 397.87 478.73 377.26 Q 482.51 374.90 487.28 370.78 C 494.13 364.84 502.77 357.77 500.22 347.44 Q 499.51 344.54 497.03 342.41 C 486.10 333.01 462.51 333.61 451.21 338.23 C 394.23 361.51 340.35 387.85 290.38 422.34 C 273.16 434.22 264.94 452.33 266.52 473.11 C 267.45 485.22 272.22 502.66 277.54 514.20 Q 297.03 556.45 329.77 593.86 C 337.74 602.95 345.04 608.48 355.71 612.55 C 359.09 613.85 362.67 614.10 366.35 614.85 C 369.57 615.50 371.97 615.05 374.93 614.15 A 0.72 0.71 -77.6 0 1 375.67 615.31 C 364.42 627.98 350.38 637.38 335.50 645.33 C 312.88 657.41 290.81 670.34 268.39 682.75 C 258.67 688.12 250.19 694.31 243.65 703.94 C 235.40 716.07 251.54 723.90 261.19 724.62 C 277.51 725.85 293.62 724.73 308.77 718.04 C 317.04 714.38 325.12 710.96 333.32 706.72 Q 344.60 700.88 356.05 695.39 C 358.94 694.00 361.10 691.74 364.13 690.39 Q 369.71 687.91 373.76 685.77 Q 403.53 670.06 433.81 651.07 C 444.70 644.24 458.20 634.54 465.16 624.37 C 482.91 598.42 472.91 564.97 460.52 538.96 Q 449.90 516.69 435.69 496.59 Q 433.20 493.08 424.46 481.26 C 409.05 460.40 394.03 441.65 365.99 449.98 Q 365.56 450.11 365.80 449.73 Z"/><path fill="#1D2951" d="M 365.99 449.98 C 394.03 441.65 409.05 460.40 424.46 481.26 Q 433.20 493.08 435.69 496.59 Q 449.90 516.69 460.52 538.96 C 472.91 564.97 482.91 598.42 465.16 624.37 C 458.20 634.54 444.70 644.24 433.81 651.07 Q 403.53 670.06 373.76 685.77 Q 369.71 687.91 364.13 690.39 C 361.10 691.74 358.94 694.00 356.05 695.39 Q 344.60 700.88 333.32 706.72 C 325.12 710.96 317.04 714.38 308.77 718.04 C 293.62 724.73 277.51 725.85 261.19 724.62 C 251.54 723.90 235.40 716.07 243.65 703.94 C 250.19 694.31 258.67 688.12 268.39 682.75 C 290.81 670.34 312.88 657.41 335.50 645.33 C 350.38 637.38 364.42 627.98 375.67 615.31 A 0.72 0.71 -77.6 0 0 374.93 614.15 C 371.97 615.05 369.57 615.50 366.35 614.85 C 362.67 614.10 359.09 613.85 355.71 612.55 C 345.04 608.48 337.74 602.95 329.77 593.86 Q 297.03 556.45 277.54 514.20 C 272.22 502.66 267.45 485.22 266.52 473.11 C 264.94 452.33 273.16 434.22 290.38 422.34 C 340.35 387.85 394.23 361.51 451.21 338.23 C 462.51 333.61 486.10 333.01 497.03 342.41 Q 499.51 344.54 500.22 347.44 C 502.77 357.77 494.13 364.84 487.28 370.78 Q 482.51 374.90 478.73 377.26 Q 445.61 397.87 420.78 410.51 C 400.42 420.88 388.73 427.59 375.40 438.63 Q 370.05 443.06 365.80 449.73 Q 365.56 450.11 365.99 449.98 Z"/><path fill="#FFFFFF" d="M 849.24 520.27 C 822.14 515.59 779.53 504.19 779.14 468.76 C 778.93 449.70 790.23 434.11 804.61 422.54 C 827.79 403.87 857.94 397.24 886.79 394.34 C 906.45 392.36 926.79 394.28 946.17 397.90 C 974.18 403.13 998.23 414.86 1018.28 433.73 Q 1018.65 434.08 1018.24 434.39 L 995.07 451.66 A 0.37 0.37 0.0 0 1 994.60 451.63 C 956.07 414.38 890.36 410.67 842.17 428.14 C 829.92 432.59 816.03 440.36 809.86 452.09 C 797.95 474.72 822.03 487.70 839.50 491.98 C 852.82 495.25 863.93 497.32 878.32 498.64 Q 918.30 502.29 937.49 505.02 C 963.71 508.75 1009.05 519.09 1011.76 552.57 C 1014.33 584.47 992.96 609.38 965.45 622.08 Q 931.07 637.96 893.48 638.37 Q 884.39 638.47 873.48 638.31 C 834.19 637.74 793.36 625.34 762.70 599.84 C 760.01 597.61 757.34 595.62 755.36 592.84 Q 754.57 591.72 755.56 590.76 L 774.79 572.12 A 0.80 0.80 0.0 0 1 775.89 572.10 C 784.16 579.50 792.77 587.31 801.82 592.44 Q 835.36 611.49 871.01 613.71 C 894.30 615.15 911.88 613.76 934.50 608.71 Q 954.47 604.25 968.42 593.15 C 977.73 585.76 986.63 569.86 983.45 557.54 C 979.21 541.09 954.59 533.67 939.75 531.52 C 909.57 527.15 879.34 525.48 849.24 520.27 Z"/><path fill="#FFFFFF" d="M 1340.94 533.87 Q 1339.11 542.90 1338.70 546.25 Q 1333.44 589.06 1326.75 631.67 A 1.00 0.99 -85.2 0 1 1325.77 632.50 L 1302.01 632.50 Q 1300.34 632.50 1300.60 630.85 Q 1305.12 601.59 1308.41 572.94 C 1311.36 547.23 1315.87 521.65 1319.05 495.93 C 1322.96 464.25 1328.41 432.80 1331.74 401.04 A 1.23 1.22 3.1 0 1 1332.96 399.95 L 1550.75 400.03 A 0.90 0.86 -85.9 0 1 1551.60 401.05 L 1548.33 424.83 A 1.35 1.35 0.0 0 1 1546.99 426.00 L 1355.77 426.00 A 0.50 0.50 0.0 0 0 1355.28 426.42 Q 1349.19 464.58 1344.87 503.14 C 1344.74 504.26 1344.10 505.62 1343.97 506.94 Q 1343.92 507.50 1344.48 507.50 L 1507.28 507.50 A 0.43 0.43 0.0 0 1 1507.71 507.97 L 1505.18 531.77 A 1.79 1.78 -87.0 0 1 1503.41 533.37 L 1341.58 533.35 Q 1341.04 533.35 1340.94 533.87 Z"/><path fill="#FFFFFF" d="M 1578.31 604.66 A 1.83 1.83 0.0 0 0 1580.12 606.25 L 1772.63 606.25 A 0.82 0.81 3.7 0 1 1773.44 607.17 L 1770.36 631.92 Q 1770.29 632.49 1769.72 632.56 C 1765.52 633.05 1760.27 632.51 1757.29 632.51 Q 1664.16 632.49 1571.02 632.50 C 1565.00 632.50 1555.27 633.06 1547.30 632.37 Q 1546.67 632.32 1546.75 631.69 L 1578.04 400.66 Q 1578.14 399.96 1578.85 399.96 L 1798.62 399.72 Q 1799.16 399.72 1799.10 400.25 Q 1798.01 410.96 1796.75 421.55 C 1796.37 424.69 1796.83 426.18 1793.19 426.19 Q 1699.09 426.45 1605.00 425.98 Q 1603.53 425.97 1602.11 426.35 Q 1601.61 426.49 1601.55 427.00 Q 1597.61 459.69 1592.89 492.27 Q 1592.27 496.54 1592.20 499.95 Q 1592.17 501.50 1593.72 501.50 L 1754.92 501.50 Q 1755.59 501.50 1755.50 502.17 L 1752.22 526.72 A 0.62 0.61 3.7 0 1 1751.61 527.25 L 1588.45 527.25 Q 1587.86 527.25 1587.78 527.83 C 1587.62 528.97 1587.81 530.46 1587.67 531.42 Q 1582.49 565.65 1578.38 600.01 Q 1578.06 602.75 1578.31 604.66 Z"/><path fill="#FFFFFF" d="M 1164.45 427.34 Q 1163.18 428.17 1162.16 429.67 Q 1093.25 530.49 1023.89 631.76 A 1.68 1.67 -72.9 0 1 1022.50 632.50 L 994.91 632.50 A 0.38 0.38 0.0 0 1 994.60 631.91 L 1153.85 401.88 A 2.62 2.61 -72.6 0 1 1156.00 400.75 L 1183.76 400.75 A 1.67 1.67 0.0 0 1 1185.29 401.75 Q 1189.01 410.19 1192.71 419.23 Q 1230.96 512.49 1269.09 605.81 C 1271.79 612.44 1276.62 622.81 1279.48 631.83 A 0.52 0.51 81.3 0 1 1278.99 632.50 L 1251.28 632.50 A 2.28 2.27 -11.2 0 1 1249.18 631.10 C 1229.82 584.14 1210.08 536.83 1191.37 489.42 C 1188.20 481.40 1184.51 473.13 1181.53 465.59 Q 1174.59 448.07 1167.21 430.74 Q 1166.29 428.58 1165.50 427.53 A 0.79 0.78 55.1 0 0 1164.45 427.34 Z"/></svg>
+    <div>
+      <div class="eyebrow">Curso teórico PC/IFR EAD · Protótipo de lição em formato missão</div>
+      <h1>Pista curta, tarde quente</h1>
+      <p class="sub">Missão da lição PDV-01, Atmosfera padrão ISA e propriedades do ar. Você decide antes de estudar, o comandante pergunta, o conteúdo entra quando a dúvida aparece, e no fim você ensina um copiloto novato.</p>
+      <div class="chips">
+        <span class="chip-topo">Princípios do Voo · PDV-M1</span>
+        <span class="chip-topo">≈ 15 min</span>
+        <span class="chip-topo vivo" id="chipVivo">Agente ao vivo</span>
+        <span class="chip-topo">Rev. protótipo 1 · 11/09/2026</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="estado" id="estado" data-modo="verificando">
+  <div class="estado-in">
+    <span class="led" aria-hidden="true"></span>
+    <p id="estadoTexto"><b>Verificando o agente.</b> Se esta página estiver aberta no claude.ai, o comandante e o copiloto respondem ao vivo. Fora dele, a missão segue em modo autoestudo, com respostas-modelo.</p>
+    <div class="controles">
+      <button class="btn sec mini lig" id="btnVoz" aria-pressed="true" title="O comandante fala e você pode responder falando">Voz: ligada</button>
+      <button class="btn sec mini lig" id="btnRadio" aria-pressed="true" title="Entrega do comandante com canal VHF simulado">Canal VHF: ligado</button>
+      <button class="btn sec mini lig" id="btnSom" aria-pressed="true" title="Sons de veredito e trilha tensa nos desafios">Som: ligado</button>
+    </div>
+  </div>
+  <p id="avisoMic" class="dica-voz" hidden style="margin:8px 4px 0"></p>
+  <p id="avisoVoz" class="dica-voz" hidden style="margin:6px 4px 0"></p>
+</div>
+
+<section class="orientacao" aria-label="Objetivo atual da missão">
+  <div class="orientacao-in">
+    <div><div class="orientacao-kicker" id="orientacaoEtapa">Etapa 1 de 7</div><p class="orientacao-titulo" id="orientacaoTexto"><b>Objetivo:</b> escolha uma janela de voo e defenda seu raciocínio inicial.</p></div>
+    <div class="progresso-wrap"><span id="orientacaoPct">0% concluído</span><div class="progresso-trilha" aria-hidden="true"><i id="orientacaoBarra"></i></div></div>
+  </div>
+</section>
+
+<section class="retomada" id="retomada" hidden aria-live="polite">
+  <div class="retomada-in"><p id="retomadaTexto"></p><button class="btn mini" id="btnRetomar" type="button">Retomar missão</button><button class="btn sec mini" id="btnDescartarRetomada" type="button">Começar do início</button></div>
+</section>
+
+<main class="grade">
+  <div class="trilha">
+
+    <!-- ETAPA 1 · BRIEFING -->
+    <section class="etapa is-open" id="et-briefing" data-etapa="briefing">
+      <div class="marcador"><span>1</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 1 · Briefing</div><h2>Duas janelas, uma pista de 900 m</h2></div>
+        <span class="dur">2 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <div class="dados" aria-label="Dados do briefing">
+          <div class="dados-grid">
+            <div><span class="k">Aeródromo</span> <span class="v">Amarais, Campinas</span></div>
+            <div><span class="k">Elevação</span> <span class="v">2.000 ft</span></div>
+            <div><span class="k">Pista</span> <span class="v">900 m</span></div>
+            <div><span class="k">QNH</span> <span class="v">1013 hPa</span></div>
+            <div><span class="k">07:00</span> <span class="v">18 °C</span> observado</div>
+            <div><span class="k">14:00</span> <span class="v">34 °C</span> previsto</div>
+            <div><span class="k">Aeronave</span> <span class="v">monomotor da frota</span></div>
+            <div><span class="k">Peso</span> <span class="v">máximo de decolagem</span></div>
+            <div><span class="k">Vento</span> <span class="v">calmo</span> nos dois horários</div>
+          </div>
+        </div>
+        <div class="chat" id="chat-briefing">
+          <div class="bolha bolha-agente" data-papel="despachante"><span class="chip">Despachante</span><p class="fala">Tenho duas janelas para o seu voo de instrução: 07:00 ou 14:00. Mesma aeronave, mesmo peso, mesma pista de 900 m. O instrutor quer a sua escolha e a sua justificativa antes do briefing. Você ainda não estudou esta lição, e é de propósito. Decida com o que você sabe hoje.</p></div>
+        </div>
+        <div class="linha" style="margin:-2px 0 10px"><button class="btn sec mini" id="btnOuvirBriefing" type="button" hidden>Ouvir o briefing pelo rádio</button></div>
+        <div class="linha" id="palpites">
+          <button class="btn sec" data-palpite="07:00" aria-pressed="false">Decolo às 07:00</button>
+          <button class="btn sec" data-palpite="14:00" aria-pressed="false">Decolo às 14:00</button>
+          <button class="btn sec" data-palpite="tanto faz" aria-pressed="false">Tanto faz, a pista é a mesma</button>
+        </div>
+        <form class="form" id="form-briefing" hidden>
+          <label class="visually-hidden" for="just-briefing">Por quê?</label>
+          <textarea id="just-briefing" placeholder="Por quê? Uma ou duas frases, com o que você sabe hoje." required></textarea>
+          <div class="linha"><button class="btn" type="submit">Enviar ao comandante</button><button type="button" class="btn sec mic" data-mic="just-briefing" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span></div>
+        </form>
+        <div class="linha" id="pos-briefing" hidden>
+          <button class="btn teal" data-abrir="regua">Ver o conteúdo 1: a régua</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 2 · A RÉGUA -->
+    <section class="etapa is-locked" id="et-regua" data-etapa="regua">
+      <div class="marcador"><span>2</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 2 · Conteúdo e pergunta</div><h2>A régua: atmosfera padrão</h2></div>
+        <span class="dur">3 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <div class="conteudo">
+          <h3>Por que existe uma atmosfera padrão</h3>
+          <p>A atmosfera real muda a cada hora e a cada lugar. Instrumentos, tabelas de performance, cartas e a calibração do altímetro precisam de uma referência fixa. A OACI definiu essa referência no Doc 7488: a Atmosfera Padrão Internacional, ISA.</p>
+          <div class="numeros">
+            <div class="num"><div class="val">1013,25 hPa</div><div class="lab">pressão ao nível do mar, 29,92 inHg</div></div>
+            <div class="num"><div class="val">15 °C</div><div class="lab">temperatura ao nível do mar</div></div>
+            <div class="num"><div class="val">1,225 kg/m³</div><div class="lab">densidade ao nível do mar</div></div>
+            <div class="num"><div class="val">−2 °C / 1.000 ft</div><div class="lab">gradiente, exato 1,98 °C, até 36.090 ft; acima, −56,5 °C constante</div></div>
+          </div>
+          <p>Na régua, ao nível do mar faz 15 °C. A 1.000 ft, 13 °C. A 5.000 ft, 5 °C. O dia real é descrito pela diferença: “ISA +10” significa 10 °C acima do padrão naquela altitude.</p>
+          <div class="aviso"><b>Erro clássico:</b> tratar ISA como o tempo de hoje. ISA é a régua. O dia real é medido contra ela.</div>
+        </div>
+        <div class="pergunta">
+          <div class="eyebrow">Pergunta do comandante</div>
+          <div class="desafio-intro" id="intro-regua"><p>O comandante tem uma pergunta para você. Ao receber, o tempo começa a contar.</p><button class="btn" type="button" data-desafio="regua">Receber o desafio</button><button type="button" class="pular" data-pular="regua">Pular esta etapa</button></div>
+          <p class="q" id="q-regua" hidden>Sua missão é a 2.000 ft de elevação. Diga dois números: a temperatura ISA a 2.000 ft e quantos graus o dia das 14:00, com 34 °C, está acima da ISA.</p>
+          <div class="cronometro" id="crono-regua" hidden data-nivel="ok"><div class="anel-wrap"><svg class="anel" viewBox="0 0 60 60" aria-hidden="true"><circle class="anel-fundo" cx="30" cy="30" r="26"/><circle class="anel-prog" cx="30" cy="30" r="26"/></svg><span class="anel-txt">75</span></div><span class="rot">segundos para a primeira resposta<br>bônus de tempo só no acerto de primeira</span></div>
+          <div class="chat" id="chat-regua"></div>
+          <form class="form" id="form-regua" hidden>
+            <label class="visually-hidden" for="resp-regua">Sua resposta</label>
+            <textarea id="resp-regua" placeholder="Escreva o raciocínio, não só o número." required></textarea>
+            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-regua" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="regua">Pular esta etapa</button></div>
+          </form>
+          <div class="linha" id="pos-regua" hidden><button class="btn teal" data-abrir="pressao">Seguir para a pressão</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 3 · PRESSÃO -->
+    <section class="etapa is-locked" id="et-pressao" data-etapa="pressao">
+      <div class="marcador"><span>3</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 3 · Conteúdo e pergunta</div><h2>Pressão: o peso da coluna de ar</h2></div>
+        <span class="dur">3 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <div class="conteudo">
+          <h3>Rápida embaixo, lenta em cima</h3>
+          <p>Pressão é o peso da coluna de ar acima de você. Subindo, a coluna encurta e a pressão cai. A queda não é linear: o ar de baixo é comprimido pelo de cima, por isso a pressão cai depressa perto do solo e devagar em altitude. Perto do nível do mar, cada 30 ft de subida tiram cerca de 1 hPa. A 18.000 ft a pressão já é metade.</p>
+          <figure>
+            <svg viewBox="0 0 520 250" role="img" aria-label="Curva da pressão ISA com a altitude: 1013 hPa ao nível do mar, 506 hPa a 18.000 ft, 226 hPa a 36.090 ft">
+              <g stroke="var(--line)" stroke-width="1">
+                <line x1="60" y1="38.2" x2="500" y2="38.2"/><line x1="60" y1="83.6" x2="500" y2="83.6"/><line x1="60" y1="129.1" x2="500" y2="129.1"/><line x1="60" y1="174.5" x2="500" y2="174.5"/><line x1="60" y1="220" x2="500" y2="220"/>
+              </g>
+              <g fill="var(--muted)" font-family="Inter,Arial,sans-serif" font-size="11">
+                <text x="54" y="42" text-anchor="end">1000</text><text x="54" y="87" text-anchor="end">750</text><text x="54" y="133" text-anchor="end">500</text><text x="54" y="178" text-anchor="end">250</text><text x="54" y="224" text-anchor="end">0 hPa</text>
+                <text x="60" y="240" text-anchor="middle">0</text><text x="170" y="240" text-anchor="middle">10.000</text><text x="280" y="240" text-anchor="middle">20.000</text><text x="390" y="240" text-anchor="middle">30.000</text><text x="500" y="240" text-anchor="middle">40.000 ft</text>
+              </g>
+              <polyline fill="none" stroke="var(--blue)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="60,35.8 115,66.7 170,93.3 258,128 280,135.3 457,178.9"/>
+              <circle cx="60" cy="35.8" r="4" fill="var(--navy)"/>
+              <circle cx="258" cy="128" r="4.5" fill="var(--navy)"/>
+              <circle cx="457" cy="178.9" r="4" fill="var(--navy)"/>
+              <g fill="var(--ink)" font-family="Inter,Arial,sans-serif" font-size="11.5" font-weight="600">
+                <text x="70" y="30">1013 hPa ao nível do mar</text>
+                <text x="268" y="122">506 hPa: metade, a 18.000 ft</text>
+                <text x="330" y="196">226 hPa a 36.090 ft</text>
+              </g>
+            </svg>
+            <figcaption>Pontos da tabela ISA da leitura: 0, 5.000, 10.000, 18.000, 20.000 e 36.090 ft.</figcaption>
+          </figure>
+          <p>O altímetro é um barômetro calibrado nessa curva, com um ajuste para a pressão de referência do dia, o QNH. Guarde a regra dos 30 ft por hectopascal: ela volta em Regulamentação e em Meteorologia.</p>
+        </div>
+        <div class="pergunta">
+          <div class="eyebrow">Pergunta do comandante</div>
+          <div class="desafio-intro" id="intro-pressao"><p>Chamada do comandante. Ao receber, o tempo começa a contar.</p><button class="btn" type="button" data-desafio="pressao">Receber o desafio</button><button type="button" class="pular" data-pular="pressao">Pular esta etapa</button></div>
+          <p class="q" id="q-pressao" hidden>Em rota, o controle passa QNH 1010 hPa. Você esquece o altímetro em 1020. O avião está mais alto ou mais baixo do que o instrumento mostra, e quanto, aproximadamente?</p>
+          <div class="cronometro" id="crono-pressao" hidden data-nivel="ok"><div class="anel-wrap"><svg class="anel" viewBox="0 0 60 60" aria-hidden="true"><circle class="anel-fundo" cx="30" cy="30" r="26"/><circle class="anel-prog" cx="30" cy="30" r="26"/></svg><span class="anel-txt">75</span></div><span class="rot">segundos para a primeira resposta<br>bônus de tempo só no acerto de primeira</span></div>
+          <div class="chat" id="chat-pressao"></div>
+          <form class="form" id="form-pressao" hidden>
+            <label class="visually-hidden" for="resp-pressao">Sua resposta</label>
+            <textarea id="resp-pressao" placeholder="Diga a direção do erro e a ordem de grandeza." required></textarea>
+            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-pressao" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="pressao">Pular esta etapa</button></div>
+          </form>
+          <div class="linha" id="pos-pressao" hidden><button class="btn teal" data-abrir="densidade">Seguir para a densidade</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 4 · DENSIDADE -->
+    <section class="etapa is-locked" id="et-densidade" data-etapa="densidade">
+      <div class="marcador"><span>4</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 4 · Conteúdo e pergunta</div><h2>Densidade: o que o avião sente</h2></div>
+        <span class="dur">3 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <div class="conteudo">
+          <h3>Três coisas reduzem a densidade</h3>
+          <p>Sustentação, arrasto, tração da hélice e potência do motor aspirado dependem da densidade do ar, não da pressão sozinha. Densidade é massa por volume.</p>
+          <div class="tres">
+            <div><b>Altitude</b>Menos pressão, menos moléculas por metro cúbico.</div>
+            <div><b>Temperatura</b>Ar quente expande. À mesma pressão, é menos denso. Dia quente é altitude a mais.</div>
+            <div><b>Umidade</b>A molécula de vapor d’água é mais leve que as de nitrogênio e oxigênio que ela substitui. O efeito é pequeno, mas soma no dia errado.</div>
+          </div>
+          <p>Menos densidade: menos sustentação à mesma velocidade indicada, menos tração da hélice, menos potência no motor aspirado. Corrida de decolagem mais longa, subida mais fraca, pouso mais longo.</p>
+          <div class="frase">Quente, alto e úmido é pior.</div>
+        </div>
+        <div class="pergunta">
+          <div class="eyebrow">Pergunta do comandante</div>
+          <div class="desafio-intro" id="intro-densidade"><p>Última pergunta antes da decisão. Ao receber, o tempo começa a contar.</p><button class="btn" type="button" data-desafio="densidade">Receber o desafio</button><button type="button" class="pular" data-pular="densidade">Pular esta etapa</button></div>
+          <p class="q" id="q-densidade" hidden>Um colega diz: “ar quente é mais leve, então à tarde o avião sobe melhor”. Onde está o erro?</p>
+          <div class="cronometro" id="crono-densidade" hidden data-nivel="ok"><div class="anel-wrap"><svg class="anel" viewBox="0 0 60 60" aria-hidden="true"><circle class="anel-fundo" cx="30" cy="30" r="26"/><circle class="anel-prog" cx="30" cy="30" r="26"/></svg><span class="anel-txt">75</span></div><span class="rot">segundos para a primeira resposta<br>bônus de tempo só no acerto de primeira</span></div>
+          <div class="chat" id="chat-densidade"></div>
+          <form class="form" id="form-densidade" hidden>
+            <label class="visually-hidden" for="resp-densidade">Sua resposta</label>
+            <textarea id="resp-densidade" placeholder="Explique com o mecanismo, não com a frase decorada." required></textarea>
+            <div class="linha"><button class="btn" type="submit">Responder</button><button type="button" class="btn sec mic" data-mic="resp-densidade" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="densidade">Pular esta etapa</button></div>
+          </form>
+          <div class="linha" id="pos-densidade" hidden><button class="btn teal" data-abrir="decisao">Voltar ao despachante</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 5 · DECISÃO -->
+    <section class="etapa is-locked" id="et-decisao" data-etapa="decisao">
+      <div class="marcador"><span>5</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 5 · Conteúdo e decisão</div><h2>Altitude-densidade e a decisão</h2></div>
+        <span class="dur">3 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <div class="conteudo">
+          <h3>A altitude que o avião sente</h3>
+          <p><b>Altitude-pressão</b> é a altitude que o altímetro mostra ajustado em 1013 hPa. <b>Altitude-densidade</b> é a altitude-pressão corrigida pela temperatura: cerca de 120 ft a mais para cada 1 °C acima da ISA. É a altitude que o avião sente ao decolar.</p>
+          <div class="ex">
+            <b>Exemplo com outros números.</b> Aeródromo a 3.000 ft, QNH 1003 hPa, 29 °C.
+            <ol>
+              <li>QNH 10 hPa abaixo de 1013: altitude-pressão ≈ 3.000 + 300 = 3.300 ft.</li>
+              <li>ISA a 3.300 ft ≈ 15 − 6,6 = 8,4 °C. Desvio ≈ +20,6 °C.</li>
+              <li>Correção ≈ 20,6 × 120 ≈ 2.470 ft.</li>
+              <li>Altitude-densidade ≈ 5.800 ft.</li>
+            </ol>
+          </div>
+          <p>O cálculo exato, com o E6B e os gráficos do manual de voo, vem em Performance, PER-09 e PER-10. Aqui basta a regra prática.</p>
+          <section class="mapa-operacional" id="mapaOperacional" data-hora="07" aria-label="Mapa visual comparativo de pista">
+            <div class="mapa-cab"><div><h3>Mesma pista. Outro ar.</h3><p>Alterne a janela para enxergar a consequência antes de fechar a decisão.</p></div><div class="mapa-toggle" role="group" aria-label="Janela de voo"><button class="btn sec mini" type="button" data-mapa-hora="07" aria-pressed="true">07:00</button><button class="btn sec mini" type="button" data-mapa-hora="14" aria-pressed="false">14:00</button></div></div>
+            <div class="mapa-leitura"><div class="mapa-dado"><span>Temperatura</span><b id="mapaTemp">18 °C</b></div><div class="mapa-dado"><span>Altitude sentida</span><b id="mapaAd">≈ 2.840 ft</b></div><div class="mapa-dado"><span>Condição</span><b id="mapaCond">ISA +7</b></div></div>
+            <div class="pista-mapa"><span class="pista-legenda" id="mapaLegenda">Menor exigência relativa de pista</span><span class="pista-aviao" aria-hidden="true"></span><span class="pista-corrida" aria-hidden="true"></span></div>
+            <p class="pista-nota" id="mapaNota">Referência visual de margem relativa; <b>não substitui</b> o cálculo com o manual de voo, o E6B e as condições reais.</p>
+          </section>
+        </div>
+        <div class="pergunta">
+          <div class="eyebrow">O despachante voltou</div>
+          <div class="desafio-intro" id="intro-decisao"><p>O despachante está chamando. Tenha a conta pronta: são dois minutos para a primeira resposta.</p><button class="btn" type="button" data-desafio="decisao">Receber a chamada</button><button type="button" class="pular" data-pular="decisao">Pular esta etapa</button></div>
+          <div class="chat" id="chat-decisao" hidden>
+            <div class="bolha bolha-agente" data-papel="despachante"><span class="chip">Despachante</span><p class="fala" id="q-decisao">Preciso fechar a escala. Me dê a altitude-densidade às 07:00 e às 14:00 com o QNH de hoje, e a janela que você quer. O comandante confere.</p></div>
+          </div>
+          <div class="cronometro" id="crono-decisao" hidden data-nivel="ok"><div class="anel-wrap"><svg class="anel" viewBox="0 0 60 60" aria-hidden="true"><circle class="anel-fundo" cx="30" cy="30" r="26"/><circle class="anel-prog" cx="30" cy="30" r="26"/></svg><span class="anel-txt">120</span></div><span class="rot">segundos para a primeira resposta<br>bônus de tempo só na decisão aceita de primeira</span></div>
+          <form class="form" id="form-decisao" hidden>
+            <div class="campos">
+              <label>Altitude-densidade às 07:00 <span class="u">(ft)</span><input type="number" id="ad7" step="10" min="0" max="20000" required></label>
+              <label>Altitude-densidade às 14:00 <span class="u">(ft)</span><input type="number" id="ad14" step="10" min="0" max="20000" required></label>
+            </div>
+            <fieldset>
+              <legend>Janela escolhida</legend>
+              <div class="radios">
+                <label><input type="radio" name="janela" value="07:00" required> 07:00</label>
+                <label><input type="radio" name="janela" value="14:00"> 14:00</label>
+              </div>
+            </fieldset>
+            <label class="visually-hidden" for="just-decisao">Justificativa</label>
+            <textarea id="just-decisao" placeholder="Justifique em duas ou três frases: o que muda no ar e o que isso faz com a pista." required></textarea>
+            <div class="linha"><button class="btn" type="submit">Enviar decisão</button><button type="button" class="btn sec mic" data-mic="just-decisao" hidden aria-pressed="false">Falar a justificativa</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><button type="button" class="pular" data-pular="decisao">Pular esta etapa</button></div>
+          </form>
+          <div class="regua" id="regua-decisao" hidden>
+            <div class="barra"><span class="rot">Elevação real</span><div class="tr"><div class="fill" style="width:0" data-w="40"></div></div><span class="n">2.000 ft</span></div>
+            <div class="barra"><span class="rot">Sentida às 07:00</span><div class="tr"><div class="fill t" style="width:0" data-w="56.8"></div></div><span class="n">≈ 2.840 ft</span></div>
+            <div class="barra"><span class="rot">Sentida às 14:00</span><div class="tr"><div class="fill a" style="width:0" data-w="95.2"></div></div><span class="n">≈ 4.760 ft</span></div>
+            <figcaption>Mesma pista, mesma aeronave. A lição registra quase 200 m a mais de corrida às 14:00.</figcaption>
+          </div>
+          <div class="linha" id="pos-decisao" hidden><button class="btn teal" data-abrir="novato">Agora ensine o novato</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 6 · ENSINE O NOVATO -->
+    <section class="etapa is-locked" id="et-novato" data-etapa="novato">
+      <div class="marcador"><span>6</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 6 · Ensine para aprender</div><h2>O copiloto novato não entendeu a escala</h2></div>
+        <span class="dur">4 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <p>Um copiloto recém-chegado vai voar com você às 07:00 e não entende por que não às 14:00. Explique para ele. Ele vai perguntar de volta. São três rodadas. Quem explica aprende duas vezes.</p>
+        <div class="pergunta">
+          <div class="eyebrow">Conversa com o copiloto</div>
+          <div class="chat" id="chat-novato"></div>
+          <form class="form" id="form-novato">
+            <label class="visually-hidden" for="resp-novato">Sua explicação</label>
+            <textarea id="resp-novato" placeholder="Explique como explicaria no hangar." required></textarea>
+            <div class="linha"><button class="btn" type="submit">Responder ao copiloto</button><button type="button" class="btn sec mic" data-mic="resp-novato" hidden aria-pressed="false">Falar</button><span class="dica-voz" data-dica-voz hidden>Diga “câmbio” para enviar.</span><span class="tempo" id="rodada-novato">rodada 1 de 3</span><button type="button" class="pular" data-pular="novato">Pular esta etapa</button></div>
+          </form>
+          <div class="linha" id="pos-novato" hidden><button class="btn teal" data-abrir="debrief">Encerrar e ver o debriefing</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 7 · DEBRIEFING -->
+    <section class="etapa is-locked" id="et-debrief" data-etapa="debrief">
+      <div class="marcador"><span>7</span></div>
+      <div class="etapa-cab">
+        <div><div class="eyebrow">Etapa 7 · Debriefing</div><h2>O que você levou, o que volta</h2></div>
+        <span class="dur">2 min</span>
+      </div>
+      <div class="etapa-corpo">
+        <div id="missao-cumprida"></div>
+        <div class="chat" id="chat-debrief"></div>
+        <div id="debrief-out"></div>
+        <div class="volta">
+          <h4>O que volta nas próximas missões</h4>
+          <ul>
+            <li><b>30 ft por hectopascal</b> volta em Regulamentação, na lição de altimetria, e em Meteorologia, na MET-04.</li>
+            <li><b>Altitude-densidade</b> volta em Performance, PER-09 e PER-10, com o E6B e o manual de voo.</li>
+            <li><b>ISA como régua</b> atravessa toda a Meteorologia: o tempo é o desvio, a ISA é a referência.</li>
+            <li><b>Sustentação e densidade</b> continuam na PDV-02, com Bernoulli e continuidade.</li>
+          </ul>
+        </div>
+        <details>
+          <summary>Formato da banca: as 5 questões da lição</summary>
+          <div id="quiz"></div>
+        </details>
+        <details>
+          <summary>Registro desta missão para o tutor humano</summary>
+          <p style="font-size:14px;color:var(--muted);margin:8px 0">No produto, este registro vai por aluno ao sistema de gestão acadêmica. O Coordenador de Curso revisa uma amostra por semana e recebe as escalações. É a tutoria com instrutor que a IS 141-007D exige; o agente é a primeira linha.</p>
+          <div style="overflow-x:auto"><table class="log" id="log-debrief"><thead><tr><th>Hora</th><th>Etapa</th><th>Evento</th><th>Detalhe</th></tr></thead><tbody></tbody></table></div>
+        </details>
+        <div class="linha" style="margin-top:14px"><button class="btn sec" id="btnRecomecar2">Recomeçar a missão</button><button class="btn sec" data-bastidores>Ver os bastidores</button></div>
+      </div>
+    </section>
+
+  </div>
+
+  <aside class="painel" aria-label="Painel da missão">
+    <h3>Painel da missão</h3>
+    <h4>Dados do dia</h4>
+    <div class="kv">
+      <span>Elevação</span><span class="v">2.000 ft</span>
+      <span>Pista</span><span class="v">900 m</span>
+      <span>QNH</span><span class="v">1013 hPa</span>
+      <span>07:00</span><span class="v">18 °C</span>
+      <span>14:00</span><span class="v">34 °C</span>
+    </div>
+    <h4>O que você já derivou</h4>
+    <div class="kv">
+      <span>ISA a 2.000 ft</span><span class="v vazio" id="p-isa">—</span>
+      <span>Desvio às 07:00</span><span class="v vazio" id="p-d7">—</span>
+      <span>Desvio às 14:00</span><span class="v vazio" id="p-d14">—</span>
+      <span>AD às 07:00</span><span class="v vazio" id="p-ad7">—</span>
+      <span>AD às 14:00</span><span class="v vazio" id="p-ad14">—</span>
+    </div>
+    <h4>Decisão</h4>
+    <div class="kv">
+      <span>Palpite inicial</span><span class="v vazio" id="p-palpite">—</span>
+      <span>Decisão final</span><span class="v vazio" id="p-decisao">—</span>
+    </div>
+    <h4>Pontuação</h4>
+    <div class="jogo">
+      <div class="tile"><div class="lab">Pontos</div><div class="val" id="p-pontos">0</div></div>
+      <div class="tile"><div class="lab">Sequência</div><div class="val" id="p-seq">0</div></div>
+    </div>
+    <div class="kv" style="margin-top:8px"><span>Prontidão para a banca</span><span class="v" id="p-pront">0%</span></div>
+    <div class="prontidao" aria-hidden="true"><i id="p-pront-bar"></i></div>
+    <h4>Progresso</h4>
+    <ul class="passos" id="passos">
+      <li data-p="briefing" class="open"><i></i>Briefing</li>
+      <li data-p="regua"><i></i>A régua</li>
+      <li data-p="pressao"><i></i>Pressão</li>
+      <li data-p="densidade"><i></i>Densidade</li>
+      <li data-p="decisao"><i></i>Decisão</li>
+      <li data-p="novato"><i></i>Ensine o novato</li>
+      <li data-p="debrief"><i></i>Debriefing</li>
+    </ul>
+    <div class="linha"><span class="tempo" id="tempo">00:00</span></div>
+    <div class="linha"><button class="btn sec mini" data-bastidores>Bastidores</button><button class="btn sec mini" id="btnRecomecar">Recomeçar</button></div>
+  </aside>
+</main>
+
+<section class="bastidores" id="bastidores" hidden>
+  <div class="bast-in">
+    <div class="eyebrow">Bastidores</div>
+    <h2>Como o agente é preso à lição</h2>
+    <p style="max-width:78ch;color:var(--muted)">Neste protótipo o agente roda na conta claude.ai de quem abre a página. No produto ele roda no servidor da SAFE, com memória por aluno, registro obrigatório e escalação ao Coordenador. As regras abaixo são exatamente as que a página envia a cada fala.</p>
+    <div class="bast-grid">
+      <div class="bast-bloco">
+        <h3>Regras e base de fatos enviadas ao agente</h3>
+        <pre class="regras" id="regras-view"></pre>
+      </div>
+      <div class="bast-bloco">
+        <h3>De onde vem cada fato</h3>
+        <ul>
+          <li><b>OACI Doc 7488</b>, atmosfera padrão: valores ao nível do mar, gradiente e tropopausa.</li>
+          <li><b>FAA PHAK, FAA-H-8083-25</b>, cap. 4 e 11: propriedades do ar, altitude-pressão e altitude-densidade. Domínio público.</li>
+          <li><b>Pacote da PDV-01</b>, versão 1 de 07/09/2026: roteiro, leitura, quiz e ficha de normas do Flight Standards.</li>
+          <li>O agente não afirma nada fora desta base. O que está fora, ele aponta para a lição em que entra.</li>
+        </ul>
+        <h3 style="margin-top:16px">O que a IS 141-007D, item 6.6, exige e como a missão atende</h3>
+        <table class="conf">
+          <thead><tr><th>Exigência</th><th>Na missão</th></tr></thead>
+          <tbody>
+            <tr><td>Não pode ser autoinstrucional; aprendizagem ativa</td><td>O aluno decide antes e depois de estudar, responde a três perguntas abertas, calcula e ensina.</td></tr>
+            <tr><td>Autoavaliação mais frequente que a avaliação de progresso</td><td>Cada pergunta do comandante devolve um veredito; a banca de 5 questões fecha a lição.</td></tr>
+            <tr><td>Acompanhar progresso e desempenho</td><td>Registro por etapa: tentativas, vereditos, tempo, pulos. Exportável por aluno.</td></tr>
+            <tr><td>Tutoria com instrutores</td><td>O agente é a primeira linha; o Coordenador é o tutor de registro, recebe escalações e revisa amostra semanal.</td></tr>
+            <tr><td>Sequenciamento claro</td><td>Trilha numerada, uma etapa libera a seguinte.</td></tr>
+          </tbody>
+        </table>
+        <h3 style="margin-top:16px">Voz e som</h3>
+        <p id="capVoz" style="font-size:14px;color:var(--muted)"></p>
+        <label style="font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Voz do comandante <select id="selVozCmd"></select> <button class="btn sec mini" type="button" data-testar-voz="comandante">Testar</button></label>
+        <label style="font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px">Voz do copiloto <select id="selVozNov"></select> <button class="btn sec mini" type="button" data-testar-voz="novato">Testar</button></label>
+        <div class="teste-som"><button class="btn sec mini" type="button" data-testar-som="correto">Som: correto</button><button class="btn sec mini" type="button" data-testar-som="erro">Som: erro</button><button class="btn sec mini" type="button" data-testar-som="desbloqueio">Som: nova etapa</button><button class="btn sec mini" type="button" data-testar-som="bed">Trilha tensa, 5 s</button></div>
+        <p style="font-size:13.5px;color:var(--muted);margin-top:8px">A voz é a do navegador (Web Speech API): no Edge há vozes naturais em português do Brasil; no Chrome, a voz do Google. Com o <b>Canal VHF</b> ligado, o comandante fala em cadência de rádio e a transmissão recebe ruído de abertura e fechamento. O microfone depende de o navegador liberar o acesso dentro desta janela; se bloquear, a resposta é digitada. Sons e trilha são gerados na hora pela página (Web Audio), sem arquivo externo.</p>
+        <h3 style="margin-top:16px">Ajustes desta demonstração</h3>
+        <label style="font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Modelo das falas
+          <select id="selModelo">
+            <option value="quick" selected>rápido: responde em 1 a 3 s</option>
+            <option value="default">padrão: pensa antes, 5 a 60 s</option>
+            <option value="complex">complexo: mais lento, mais profundo</option>
+          </select>
+        </label>
+        <p style="font-size:13.5px;color:var(--muted);margin-top:8px">O debriefing usa sempre o modelo padrão. Cada fala é uma chamada nova; nada é reaproveitado entre alunos.</p>
+        <h3 style="margin-top:16px">Registro ao vivo</h3>
+        <div style="overflow-x:auto"><table class="log" id="log-bast"><thead><tr><th>Hora</th><th>Etapa</th><th>Evento</th><th>Detalhe</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <svg viewBox="0 0 61.52 92.8" aria-hidden="true"><path fill="#5BAEE2" d="M19.72,59.95c0,0-23.92-27.66-8.71-38.68C26.7,9.89,47.95,1.57,50.65,0.52c4.3-1.67,18.78,0.47,5.2,9.47c0,0-7.28,4.45-15.96,9c0,0-16.88,7.11-13,19.08c0,0,8.68,17.24,7.02,24.97c-0.29,1.38-0.92,2.45-1.97,3.08C31.93,66.11,25.71,68.13,19.72,59.95"/><path fill="#63B1B5" d="M50.8,71.17c-8.08,6.98-31.36,18.17-33.92,19.36C5.16,95.98-9.32,91.02,8,82.07c0,0,6.07-3.53,14.01-7.82c0,0,7.72-3.55,11.01-8.97h-0.13c0.49-0.59,0.82-1.35,1.01-2.24c1.65-7.73-7.03-24.98-7.03-24.98c-1.28-3.94-0.3-7.35,1.59-10.17c0.4-0.22,0.83-0.4,1.3-0.55c0,0,6.4-2.72,12.09,5.79C41.86,33.14,64.39,59.43,50.8,71.17"/></svg>
+  <span>Flight Standards · SAFE Escola de Aviação Civil · Protótipo interno, não é material publicado do curso.</span>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- Base de fatos e regras (o que o agente recebe) ---------- */
+  const FATOS = [
+    'ISA ao nível do mar: 1013,25 hPa (29,92 inHg), 15 °C, 1,225 kg/m³. Gradiente −1,98 °C por 1.000 ft, arredondado a −2 °C por 1.000 ft, até 36.090 ft (tropopausa padrão); acima, −56,5 °C constante. Fonte: OACI Doc 7488.',
+    '"ISA +10" significa 10 °C acima do padrão naquela altitude. ISA a 2.000 ft = 15 − 4 = 11 °C. ISA a 1.000 ft = 13 °C. ISA a 5.000 ft = 5 °C.',
+    'Pressão é o peso da coluna de ar. Cai rápido perto do solo e devagar em altitude. Perto do nível do mar, cerca de 1 hPa a cada 30 ft. A 18.000 ft a pressão é cerca de metade (506 hPa). O altímetro é um barômetro calibrado na curva ISA, com ajuste para a pressão de referência do dia, o QNH.',
+    'Se o QNH cai 10 hPa (por exemplo de 1020 para 1010) e o piloto não reajusta o altímetro, o avião está cerca de 300 ft MAIS BAIXO do que o instrumento indica. Frase da lição: "Do alto para o baixo, cuidado com o chão."',
+    'Densidade é massa por volume. Reduzem a densidade: altitude (menos pressão), temperatura alta (o ar expande) e umidade (a molécula de vapor d\'água é mais leve que as de nitrogênio e oxigênio que substitui; efeito pequeno). Menos densidade: menos sustentação à mesma velocidade indicada, menos tração da hélice, menos potência no motor aspirado; corrida de decolagem mais longa, subida mais fraca, pouso mais longo. Frase: "Quente, alto e úmido é pior."',
+    'Altitude-pressão: altitude lida com o altímetro ajustado em 1013 hPa. Altitude-densidade: altitude-pressão corrigida pela temperatura, cerca de 120 ft a mais por °C acima da ISA. Se o QNH não é 1013, cada hPa abaixo de 1013 acrescenta cerca de 30 ft à altitude-pressão. O cálculo exato com E6B e manual de voo fica para Performance (PER-09 e PER-10). Fonte: FAA PHAK cap. 4 e 11.',
+    'Missão de hoje: aeródromo com elevação 2.000 ft, pista 900 m, QNH 1013 hPa, vento calmo. 07:00 com 18 °C = ISA +7, altitude-densidade ≈ 2.000 + 7 × 120 = 2.840 ft. 14:00 com 34 °C = ISA +23, altitude-densidade ≈ 2.000 + 23 × 120 = 4.760 ft, cerca de 4.800 ft. A lição registra que às 14:00 a mesma aeronave usa quase 200 m a mais de pista. A janela recomendada é 07:00.'
+  ];
+  const REGRAS = [
+    '1. Nunca dê a resposta na primeira tentativa. Faça UMA pergunta por vez. No máximo uma dica por turno; a dica aponta o caminho, não o resultado.',
+    '2. Quando a mensagem disser que é a terceira tentativa, explique a resposta completa em até quatro frases e diga qual passo faltou.',
+    '3. Só afirme o que está nos FATOS. Se perguntarem algo fora deles, diga que não faz parte desta lição e aponte onde entra: Meteorologia para QNH e altimetria, Performance para distâncias de decolagem, PDV-02 para sustentação. Não invente número, norma ou regra.',
+    '4. Nunca cite matrícula de aeronave, fabricante, modelo ou nome de pessoa. Diga "aeronave da frota". Nenhuma opinião sobre ANAC, DECEA ou outras escolas. Nenhuma piada com acidente.',
+    '5. Português do Brasil, frases curtas, vocabulário da aviação brasileira. Sem cumprimento, sem "olá". Máximo de 90 palavras. Sem listas, sem markdown, sem emojis.',
+    '6. Termine SEMPRE a resposta com uma linha final exatamente no formato [[STATUS:x]]. Nada depois dessa linha.'
+  ];
+  function regrasBase(){
+    return 'Você é um agente de instrução da SAFE Escola de Aviação Civil dentro da lição PDV-01, Atmosfera padrão ISA e propriedades do ar, do curso teórico de Piloto Comercial/IFR. O aluno está numa missão: escolher entre decolar às 07:00 ou às 14:00 de uma pista de 900 m.\n\nFATOS DA LIÇÃO, única base permitida para afirmar conteúdo:\n- ' + FATOS.join('\n- ') + '\n\nREGRAS, não negociáveis:\n' + REGRAS.join('\n');
+  }
+
+  /* ---------- Perguntas do comandante (etapas 2 a 4) ---------- */
+  const PERGUNTAS = {
+    regua: {
+      pergunta: 'Sua missão é a 2.000 ft de elevação. Diga dois números: a temperatura ISA a 2.000 ft e quantos graus o dia das 14:00, com 34 °C, está acima da ISA.',
+      gabarito: 'ISA a 2.000 ft = 15 − 2 × 2 = 11 °C. O dia das 14:00 (34 °C) é ISA +23. Aceite 11 °C e +23 com pequenas variações de arredondamento. Se o aluno também disser que 07:00 (18 °C) é ISA +7, elogie em uma frase.',
+      dicas: ['Comece pelos 15 °C do nível do mar. Quanto a régua tira por mil pés?', 'Já tem a ISA a 2.000 ft? Agora compare com os 34 °C reais.'],
+      modelo: 'Ao nível do mar a régua marca 15 °C e tira 2 °C por mil pés. A 2.000 ft, 15 − 4 = 11 °C. O dia das 14:00 tem 34 °C, ou seja, 23 °C acima: ISA +23. Às 07:00, 18 °C, o dia é ISA +7.',
+      aoConcluir(){ setPainel('p-isa','11 °C'); setPainel('p-d7','ISA +7'); setPainel('p-d14','ISA +23'); }
+    },
+    pressao: {
+      pergunta: 'Em rota, o controle passa QNH 1010 hPa. Você esquece o altímetro em 1020. O avião está mais alto ou mais baixo do que o instrumento mostra, e quanto, aproximadamente?',
+      gabarito: 'Mais BAIXO, cerca de 300 ft (10 hPa × 30 ft por hPa). O altímetro ficou com uma referência de pressão maior que a real e por isso indica altitude maior do que a verdadeira. Frase da lição: "Do alto para o baixo, cuidado com o chão." Aceite "mais baixo" com valor entre 250 e 350 ft.',
+      dicas: ['Quanto vale cada hectopascal em pés, perto do solo?', 'O altímetro ficou com uma referência de pressão maior do que a real. Ele acha que você está mais alto ou mais baixo do que está?'],
+      modelo: 'Mais baixo. Cada hectopascal vale cerca de 30 ft perto do solo; 10 hPa são cerca de 300 ft. O altímetro ficou com uma referência de pressão maior do que a real e indica mais altitude do que existe. Do alto para o baixo, cuidado com o chão.',
+      aoConcluir(){}
+    },
+    densidade: {
+      pergunta: 'Um colega diz: “ar quente é mais leve, então à tarde o avião sobe melhor”. Onde está o erro?',
+      gabarito: 'O ar quente é menos denso. Sustentação, tração da hélice e potência do motor aspirado dependem da densidade, da quantidade de ar por metro cúbico, e não de o ar ser "leve". Menos denso significa menos sustentação à mesma velocidade indicada, menos tração e menos potência: decolagem mais longa e subida mais fraca. O que é leve para o ar é ruim para o avião. Aceite respostas que liguem calor a menor densidade e menor densidade a menor sustentação, tração ou potência.',
+      dicas: ['Do que dependem a sustentação e a potência: de o ar ser leve, ou da quantidade de ar por metro cúbico?', 'Se passam menos moléculas pela asa e pela hélice a cada segundo, o que acontece com a força que elas produzem?'],
+      modelo: 'O erro é confundir leve com bom. Ar quente é menos denso: menos moléculas por metro cúbico. Sustentação, tração da hélice e potência do motor aspirado dependem dessa quantidade de ar. Menos densidade, menos sustentação à mesma velocidade, menos tração, menos potência. À tarde o avião sobe pior, não melhor.',
+      aoConcluir(){}
+    }
+  };
+
+  const QUIZ = [
+    {n:1,e:'Na atmosfera padrão, a temperatura ao nível do mar e o gradiente térmico são:',a:{a:'20 °C e 1 °C por 1.000 ft',b:'15 °C e 2 °C por 1.000 ft',c:'15 °C e 3 °C por 1.000 ft',d:'0 °C e 2 °C por 1.000 ft'},c:'b',x:'ISA: 15 °C ao nível do mar e 1,98 °C, arredondado a 2 °C, por 1.000 ft até 36.090 ft (OACI Doc 7488).'},
+    {n:2,e:'A pressão ISA ao nível do mar é:',a:{a:'1000 hPa',b:'1023 hPa',c:'1013,25 hPa',d:'29,92 hPa'},c:'c',x:'1013,25 hPa, equivalente a 29,92 inHg.'},
+    {n:3,e:'Qual combinação reduz mais a densidade do ar?',a:{a:'frio, baixo e seco',b:'frio, alto e seco',c:'quente, alto e úmido',d:'quente, baixo e seco'},c:'c',x:'Altitude, calor e umidade reduzem a densidade; os três fatores somam.'},
+    {n:4,e:'Perto do nível do mar, 1 hPa de pressão corresponde a aproximadamente:',a:{a:'3 ft',b:'30 ft',c:'300 ft',d:'1.000 ft'},c:'b',x:'Regra prática: cerca de 30 ft por hectopascal perto do solo; 10 hPa de erro de QNH são cerca de 300 ft.'},
+    {n:5,e:'Aeródromo a 2.000 ft, QNH 1013, temperatura 31 °C (ISA +20). A altitude-densidade aproximada é:',a:{a:'2.000 ft',b:'3.200 ft',c:'4.400 ft',d:'6.000 ft'},c:'c',x:'2.000 + 20 × 120 = 4.400 ft (regra de 120 ft por °C acima da ISA).'}
+  ];
+
+  const ERRO = {
+    rate_limited:'Muitas chamadas em pouco tempo. Espere um instante e envie de novo.',
+    session_expired:'Sua sessão do claude.ai expirou. Entre de novo e reenvie.',
+    refused:'O agente não respondeu a este texto. Reformule a resposta.',
+    empty_completion:'O agente não escreveu nada. Reenvie com outras palavras.',
+    invalid_json:'O debriefing veio incompleto. Tente de novo.',
+    prompt_too_large:'A conversa ficou longa demais. Recomece a etapa.',
+    upstream_error:'Falha momentânea de conexão. Tente de novo.',
+    invalid_request:'Erro interno da página ao montar a chamada.',
+    transform_error:'Erro interno da página ao montar a chamada.'
+  };
+  const OCULTAR = new Set(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed']);
+
+  /* ---------- Movimento, som, voz e jogo ---------- */
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const Som = {
+    ctx:null, master:null, ligado:false, bed:null, pulsoTimer:null, bpm:60,
+    init(){ if (this.ctx) return true; const C = window.AudioContext || window.webkitAudioContext; if (!C) return false; this.ctx = new C(); this.master = this.ctx.createGain(); this.master.gain.value = 0.5; this.master.connect(this.ctx.destination); return true; },
+    async ligar(v){ this.ligado = !!v; if (this.ligado) { if (!this.init()) { this.ligado = false; } else if (this.ctx.state === 'suspended') { try { await this.ctx.resume(); } catch(e){} } } else { this.pararBed(); } return this.ligado; },
+    pronto(){ return this.ligado && !!this.ctx && this.ctx.state === 'running'; },
+    tom(freq, dur, o){ o = o || {}; if (!this.pronto()) return; const c = this.ctx, t = c.currentTime + (o.t0 || 0); const osc = c.createOscillator(), g = c.createGain(); osc.type = o.tipo || 'sine'; osc.frequency.setValueAtTime(freq, t); if (o.para) osc.frequency.exponentialRampToValueAtTime(o.para, t + dur); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(o.ganho || 0.15, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); osc.connect(g); g.connect(this.master); osc.start(t); osc.stop(t + dur + 0.03); },
+    ruido(dur, o){ o = o || {}; if (!this.pronto()) return; const c = this.ctx, n = Math.floor(c.sampleRate * dur), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const src = c.createBufferSource(); src.buffer = buf; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = o.freq || 1200; f.Q.value = o.q || 0.8; const g = c.createGain(); const t = c.currentTime + (o.t0 || 0); g.gain.setValueAtTime(o.ganho || 0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); src.connect(f); f.connect(g); g.connect(this.master); src.start(t); src.stop(t + dur + 0.03); },
+    correto(){ this.tom(659, 0.12, {ganho:0.12}); this.tom(880, 0.22, {t0:0.12, ganho:0.12}); },
+    parcial(){ this.tom(494, 0.1, {ganho:0.1}); this.tom(494, 0.1, {t0:0.16, ganho:0.1}); },
+    erro(){ this.tom(196, 0.3, {tipo:'triangle', ganho:0.12, para:140}); },
+    desbloqueio(){ [523, 659, 784, 1047].forEach((f, i) => this.tom(f, 0.16, {t0:i*0.08, ganho:0.09})); },
+    radio(){ this.ruido(0.05, {freq:1800, ganho:0.14}); this.tom(1400, 0.03, {t0:0.05, ganho:0.05}); },
+    radioFim(){ this.ruido(0.08, {freq:900, ganho:0.1}); },
+    tick(){ this.tom(1500, 0.03, {ganho:0.07}); },
+    alarme(){ this.tom(880, 0.15, {tipo:'square', ganho:0.05}); this.tom(880, 0.15, {t0:0.2, tipo:'square', ganho:0.05}); },
+    vitoria(){ [392, 523, 659, 784].forEach((f, i) => this.tom(f, 0.22, {t0:i*0.11, ganho:0.11})); this.tom(1047, 0.6, {t0:0.5, ganho:0.11}); },
+    iniciarBed(){ if (!this.pronto() || this.bed) return; const c = this.ctx, g = c.createGain(); g.gain.setValueAtTime(0.0001, c.currentTime); g.gain.exponentialRampToValueAtTime(0.08, c.currentTime + 1.5); const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 170; const o1 = c.createOscillator(), o2 = c.createOscillator(), o3 = c.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 55; o2.type = 'sawtooth'; o2.frequency.value = 55.7; o3.type = 'sine'; o3.frequency.value = 110; const g3 = c.createGain(); g3.gain.value = 0.35; o1.connect(lp); o2.connect(lp); o3.connect(g3); g3.connect(lp); lp.connect(g); g.connect(this.master); o1.start(); o2.start(); o3.start(); this.bed = {g, oscs:[o1, o2, o3]}; this.setRitmo(60); },
+    setRitmo(bpm){ this.bpm = bpm; if (!this.bed) return; if (this.pulsoTimer) clearInterval(this.pulsoTimer); const bate = () => { this.tom(62, 0.14, {ganho:0.22, para:48}); this.tom(62, 0.1, {t0:0.18, ganho:0.13, para:48}); }; bate(); this.pulsoTimer = setInterval(bate, 60000 / bpm); },
+    pararBed(){ if (this.pulsoTimer) { clearInterval(this.pulsoTimer); this.pulsoTimer = null; } const b = this.bed; if (!b) return; this.bed = null; const c = this.ctx; try { b.g.gain.cancelScheduledValues(c.currentTime); b.g.gain.setValueAtTime(Math.max(b.g.gain.value, 0.0001), c.currentTime); b.g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.8); } catch(e){} setTimeout(() => b.oscs.forEach(o => { try { o.stop(); } catch(e){} }), 900); }
+  };
+
+  function paraFala(t){
+    return String(t).replace(/\[\[[^\]]*\]\]/g, '').replace(/≈/g, ' aproximadamente ').replace(/×/g, ' vezes ').replace(/−/g, ' menos ').replace(/\+\s?(\d)/g, ' mais $1')
+      .replace(/(\d)\.(\d{3})\b/g, '$1$2').replace(/(\d),(\d)/g, '$1 vírgula $2')
+      .replace(/\bhPa\b/g, ' hectopascais').replace(/\bft\b/g, ' pés').replace(/°C/g, ' graus').replace(/\bkt\b/g, ' nós').replace(/kg\/m³/g, ' quilos por metro cúbico').replace(/inHg/g, ' polegadas de mercúrio')
+      .replace(/\bQNH\b/g, 'Q N H').replace(/\bQFE\b/g, 'Q F E').replace(/\bE6B\b/g, 'E seis B').replace(/\bAD\b/g, 'altitude-densidade').replace(/\bISA\b/g, 'isa')
+      .replace(/\b0?7:00\b/g, 'sete horas').replace(/\b14:00\b/g, 'quatorze horas').replace(/\bPDV-0?(\d+)\b/g, 'P D V $1').replace(/\bPER-0?(\d+)\b/g, 'P E R $1').replace(/\bMET-0?(\d+)\b/g, 'M E T $1');
+  }
+
+  const Voz = {
+    ligada:true, radio:true, suportaTTS:('speechSynthesis' in window), RecCtor:(window.SpeechRecognition || window.webkitSpeechRecognition || null),
+    vozes:[], vozCmd:null, vozNov:null, rec:null, ouvindo:false, micBloqueado:false, micOk:false, ultimoErro:null, qualidade:-1, escolhaManual:false,
+    nota(x){ return (/natural|neural/i.test(x.name) ? 120 : 0) + (/microsoft/i.test(x.name) ? 55 : 0) + (/google/i.test(x.name) ? 40 : 0) + (/online/i.test(x.name) ? 20 : 0) + (x.localService === false ? 10 : 0) + (/desktop/i.test(x.name) ? -30 : 0); },
+    carregarVozes(){ if (!this.suportaTTS) return; const todas = speechSynthesis.getVoices(); let v = todas.filter(x => /pt[-_]BR/i.test(x.lang)); if (!v.length) v = todas.filter(x => /^pt/i.test(x.lang)); v = v.slice().sort((a, b) => this.nota(b) - this.nota(a)); this.vozes = v; this.qualidade = v.length ? this.nota(v[0]) : -1;
+      const masc = /daniel|ant[oô]nio|thiago|fabio|humberto|julio|donato|male/i, fem = /francisca|maria|let[ií]cia|brenda|camila|thalita|yara|elza|manuela|giovanna|female/i;
+      if (!this.escolhaManual || !v.includes(this.vozCmd)) { this.vozCmd = v.find(x => masc.test(x.name) && this.nota(x) >= 20) || v[0] || null; }
+      if (!this.escolhaManual || !v.includes(this.vozNov)) { const cmd = this.vozCmd; this.vozNov = v.find(x => x !== cmd && fem.test(x.name) && this.nota(x) >= 20) || v.find(x => x !== cmd && this.nota(x) >= this.nota(cmd) - 30) || cmd; }
+      preencherVozes(); avisarQualidadeVoz(); },
+    falar(texto, papel, o){
+      o = o || {};
+      if (!this.ligada || !this.suportaTTS || !texto) { if (o.aoFim) o.aoFim(); return; }
+      const u = new SpeechSynthesisUtterance(texto); u.lang = 'pt-BR';
+      const v = papel === 'novato' ? this.vozNov : this.vozCmd;
+      if (v) u.voice = v;
+      const canal = this.radio && ['comandante','despachante','novato'].includes(papel);
+      u.rate = papel === 'novato' ? 1.01 : (papel === 'despachante' ? 0.93 : 0.89);
+      u.pitch = papel === 'novato' ? 1.08 : (papel === 'comandante' ? 0.82 : 0.90);
+      const finalizar = () => { if (canal) Som.radioFim(); if (o.aoFim) o.aoFim(); };
+      u.onend = finalizar; u.onerror = finalizar;
+      const emitir = () => { if (canal) Som.radio(); speechSynthesis.speak(u); };
+      if (canal) setTimeout(emitir, 65); else emitir();
+    },
+    calar(){ if (this.suportaTTS) { try { speechSynthesis.cancel(); } catch(e){} } },
+    ouvir(ta, o){ o = o || {}; if (!this.RecCtor) return false; if (this.ouvindo) { this.pararOuvir(); return true; } this.calar(); let rec; try { rec = new this.RecCtor(); } catch(e) { return false; } rec.lang = 'pt-BR'; rec.interimResults = true; rec.continuous = true; rec.maxAlternatives = 1; const base = ta.value ? ta.value.replace(/\s+$/, '') + ' ' : ''; let finalTxt = ''; this.ultimoErro = null; const botao = o.botao;
+      rec.onresult = ev => { let interim = ''; for (let i = ev.resultIndex; i < ev.results.length; i++) { const r = ev.results[i]; if (r.isFinal) finalTxt += r[0].transcript + ' '; else interim += r[0].transcript; } ta.value = (base + finalTxt + interim).replace(/\s+/g, ' ').trimStart(); if (/c[âa]mbio[.!]?\s*$/i.test(finalTxt)) { ta.value = ta.value.replace(/[,\s]*c[âa]mbio[.!]?\s*$/i, '').trim(); rec.onend = null; this.pararOuvir(); this.ouvindo = false; this.rec = null; if (botao) this._botaoIdle(botao); if (o.aoEnviar) o.aoEnviar(); } };
+      rec.onerror = ev => { this.ultimoErro = ev.error; if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') { this.micBloqueado = true; this.micOk = false; } };
+      rec.onend = () => { this.ouvindo = false; this.rec = null; if (botao) this._botaoIdle(botao); if (this.micBloqueado) avisoMic('O navegador bloqueou o microfone dentro desta janela. Digite a resposta. No produto, em domínio próprio da SAFE, o microfone é liberado normalmente.'); else if (this.ultimoErro === 'no-speech') avisoMic('Não ouvi nada. Toque em Falar e responda perto do microfone.'); else if (this.ultimoErro === 'audio-capture') avisoMic('Nenhum microfone encontrado.'); };
+      try { rec.start(); } catch(e) { return false; } this.rec = rec; this.ouvindo = true; if (botao) { botao.classList.add('ouvindo'); botao.textContent = 'Ouvindo… toque para parar'; botao.setAttribute('aria-pressed', 'true'); } return true; },
+    _botaoIdle(b){ b.classList.remove('ouvindo'); b.textContent = b.dataset.rotulo || 'Falar'; b.setAttribute('aria-pressed', 'false'); },
+    pararOuvir(){ if (this.rec) { try { this.rec.stop(); } catch(e){} } }
+  };
+  function avisoMic(msg){ const el = document.getElementById('avisoMic'); el.textContent = msg; el.hidden = false; if (Voz.micBloqueado) { document.querySelectorAll('[data-mic]').forEach(b => { b.hidden = true; }); document.querySelectorAll('[data-dica-voz]').forEach(s => { s.hidden = true; }); } }
+  function avisarQualidadeVoz(){ const el = document.getElementById('avisoVoz'); if (!el) return; if (!Voz.ligada || !Voz.suportaTTS) { el.hidden = true; return; } if (!Voz.vozes.length) { el.textContent = 'Este navegador não tem voz em português instalada. As falas ficam só em texto.'; el.hidden = false; return; } if (Voz.qualidade < 100) { el.textContent = 'Voz em uso: ' + (Voz.vozCmd ? Voz.vozCmd.name : 'nenhuma') + '. Neste navegador só há vozes básicas. Abra este mesmo endereço no Microsoft Edge: lá a página escolhe sozinha as vozes naturais Antonio e Francisca, e o microfone costuma ser liberado.'; el.hidden = false; } else { el.textContent = 'Vozes naturais em uso: ' + Voz.vozCmd.name.replace(/ - .*$/, '') + ' (comandante) e ' + Voz.vozNov.name.replace(/ - .*$/, '') + ' (copiloto).'; el.hidden = false; } }
+  function politicaMic(){ const pp = document.permissionsPolicy || document.featurePolicy; if (pp && typeof pp.allowsFeature === 'function') { try { return pp.allowsFeature('microphone') ? 'permitida' : 'bloqueada'; } catch(e) { return 'desconhecida'; } } return 'desconhecida'; }
+  async function pedirMic(){
+    if (Voz.micOk) return true;
+    if (politicaMic() === 'bloqueada') { Voz.micBloqueado = true; avisoMic('O quadro em que esta página abre não libera o microfone: é a política de permissões do visualizador, não um ajuste do seu navegador. Digite a resposta. No produto, em domínio próprio da SAFE, o microfone é liberado.'); return false; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { avisoMic('Este navegador não dá acesso ao microfone. Digite a resposta.'); return false; }
+    try { const st = await navigator.mediaDevices.getUserMedia({audio:true}); st.getTracks().forEach(t => t.stop()); Voz.micOk = true; document.getElementById('avisoMic').hidden = true; registrar('voz', 'microfone', 'liberado'); return true; }
+    catch(e) { const n = (e && e.name) || 'erro'; registrar('voz', 'microfone', n); if (n === 'NotAllowedError' || n === 'SecurityError') { Voz.micBloqueado = true; avisoMic('O microfone foi negado. Se apareceu um pedido do navegador, aceite e toque em Falar de novo; se não apareceu nada, o visualizador bloqueia o microfone dentro deste quadro. Digite a resposta.'); } else if (n === 'NotFoundError') avisoMic('Nenhum microfone encontrado neste computador.'); else avisoMic('Não consegui abrir o microfone (' + n + '). Digite a resposta.'); return false; }
+  }
+  function faladorIncremental(papel){ let dito = 0, ultimo = ''; return { alimentar(t){ ultimo = t; for (;;) { const resto = t.slice(dito); const m = resto.match(/^[\s\S]*?[.!?…](?=\s|$)/); if (!m) break; dito += m[0].length; const frase = m[0].trim(); if (frase) Voz.falar(paraFala(frase), papel); } }, fechar(){ const resto = ultimo.slice(dito).trim(); dito = ultimo.length; if (resto) Voz.falar(paraFala(resto), papel); } }; }
+  function datilografar(el, texto){ return new Promise(res => { if (RM) { el.textContent = texto; res(); return; } el.textContent = ''; el.classList.add('datilo'); let i = 0; const passo = () => { i += 2; el.textContent = texto.slice(0, i); if (i < texto.length) setTimeout(passo, 26); else { el.classList.remove('datilo'); res(); } }; passo(); }); }
+  function animarNumero(el, alvo, sufixo){ if (!el) return; sufixo = sufixo || ''; const de = parseInt(String(el.textContent).replace(/\D/g, ''), 10) || 0; if (RM || de === alvo) { el.textContent = alvo + sufixo; return; } const t0 = performance.now(), dur = 650; const passo = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(de + (alvo - de) * e) + sufixo; if (k < 1) requestAnimationFrame(passo); }; requestAnimationFrame(passo); }
+  function flutuar(ancora, texto){ if (RM || !ancora) return; const r = ancora.getBoundingClientRect(); const s = document.createElement('span'); s.className = 'flut'; s.textContent = texto; s.style.left = (r.left + window.scrollX + Math.max(0, Math.min(r.width - 40, 24))) + 'px'; s.style.top = (r.top + window.scrollY - 8) + 'px'; document.body.appendChild(s); setTimeout(() => s.remove(), 1300); }
+  function carimbar(b, s){ const rot = {correto:'Correto', parcial:'Parcial', incorreto:'Revisar', explicado:'Explicado', aceita:'Aceita', revisar:'Revisar'}; if (!rot[s]) return; const c = document.createElement('span'); c.className = 'carimbo'; c.dataset.s = s; c.textContent = rot[s]; c.setAttribute('aria-hidden', 'true'); b.appendChild(c); }
+
+  const Desafio = {
+    ativo:null,
+    iniciar(id, segundos, o){ o = o || {}; this.parar(); const el = document.getElementById('crono-' + id); if (!el) return; el.hidden = false; el.classList.remove('parado'); const circ = el.querySelector('.anel-prog'), txt = el.querySelector('.anel-txt'); const C = 163.36, total = segundos, t0 = performance.now(); let ultimoTick = -1; Som.iniciarBed(); const st = {id, total, restante:total, el, timer:null}; st.timer = setInterval(() => { const rest = Math.max(0, total - (performance.now() - t0) / 1000); st.restante = rest; const frac = rest / total; circ.style.strokeDashoffset = String(C * (1 - frac)); txt.textContent = Math.ceil(rest); el.dataset.nivel = frac > 0.5 ? 'ok' : (frac > 0.2 ? 'alerta' : 'critico'); const bpm = Math.round(60 + (1 - frac) * 60); if (Math.abs(bpm - Som.bpm) >= 6) Som.setRitmo(bpm); const s = Math.ceil(rest); if (rest <= 10 && s !== ultimoTick) { ultimoTick = s; Som.tick(); } if (rest <= 0) { this.parar(true); Som.alarme(); if (o.aoFim) o.aoFim(); } }, 100); this.ativo = st; },
+    parar(esgotou){ const st = this.ativo; if (!st) return 0; clearInterval(st.timer); this.ativo = null; Som.pararBed(); st.el.classList.add('parado'); if (esgotou) st.el.dataset.nivel = 'esgotado'; return st.restante / st.total; }
+  };
+
+  const Jogo = {
+    pontos:0, sequencia:0, melhorSequencia:0, pront:{regua:0, pressao:0, densidade:0, decisao:0, banca:0}, bancaCertas:0,
+    add(n, motivo, ancora){ if (!n) return; this.pontos += n; animarNumero(document.getElementById('p-pontos'), this.pontos); flutuar(ancora, '+' + n); registrar('jogo', '+' + n + ' pontos', motivo); },
+    _seq(primeira, fecha){ if (primeira) { this.sequencia += 1; this.melhorSequencia = Math.max(this.melhorSequencia, this.sequencia); } else if (fecha) { this.sequencia = 0; } animarNumero(document.getElementById('p-seq'), this.sequencia); },
+    vereditoPergunta(id, status, n, frac, ancora){ const primeira = status === 'correto' && n === 1; const base = status === 'correto' ? (n === 1 ? 100 : (n === 2 ? 60 : 30)) : (status === 'explicado' ? 20 : (status === 'autoestudo' ? 40 : 0)); this._seq(primeira, true); const mult = (primeira && this.sequencia >= 2) ? 1.5 : 1; const bonus = primeira ? Math.round(50 * (frac || 0)) : 0; this.pront[id] = status === 'correto' ? (n === 1 ? 20 : 14) : (status === 'explicado' ? 6 : (status === 'autoestudo' ? 10 : 0)); this.add(Math.round(base * mult) + bonus, id + ' · ' + status + (mult > 1 ? ' · sequência ×' + this.sequencia : '') + (bonus ? ' · bônus de tempo ' + bonus : ''), ancora); this.atualizar(); },
+    vereditoDecisao(status, n, frac, ancora){ const primeira = status === 'aceita' && n === 1; const base = status === 'aceita' ? (n === 1 ? 150 : 90) : (status === 'explicado' ? 30 : (status === 'autoestudo' ? 60 : 0)); this._seq(primeira, true); const bonus = primeira ? Math.round(50 * (frac || 0)) : 0; this.pront.decisao = status === 'aceita' ? (n === 1 ? 20 : 14) : (status === 'explicado' ? 8 : (status === 'autoestudo' ? 10 : 0)); this.add(base + bonus, 'decisão · ' + status + (bonus ? ' · bônus de tempo ' + bonus : ''), ancora); this.atualizar(); },
+    novato(rodada, ancora){ this.add(30, 'explicação ao novato, rodada ' + rodada, ancora); },
+    banca(ok, ancora){ if (ok) { this.bancaCertas += 1; this.pront.banca = Math.min(20, this.bancaCertas * 4); this.add(20, 'banca', ancora); this.atualizar(); } },
+    prontidao(){ return Math.min(100, Object.values(this.pront).reduce((a, b) => a + b, 0)); },
+    atualizar(){ const p = this.prontidao(); animarNumero(document.getElementById('p-pront'), p, '%'); document.getElementById('p-pront-bar').style.width = p + '%'; }
+  };
+
+  /* ---------- Estado ---------- */
+  const ORDEM = ['briefing','regua','pressao','densidade','decisao','novato','debrief'];
+  const S = {
+    inicio: Date.now(),
+    palpite: null, palpiteJust: '',
+    tentativas: {regua:0, pressao:0, densidade:0, decisao:0},
+    status: {},
+    historico: {regua:[], pressao:[], densidade:[], decisao:[], novato:[]},
+    decisao: null,
+    novatoRodada: 0,
+    log: [],
+    debrief: null,
+    modelo: 'quick',
+    fracTempo: {},
+    desafioRecebido: {},
+    etapaAtual: 'briefing'
+  };
+  try { if (localStorage.getItem('pdv01-voz') === '0') Voz.ligada = false; } catch(e){}
+  try { if (localStorage.getItem('pdv01-radio') === '0') Voz.radio = false; } catch(e){}
+  try { Som.ligado = localStorage.getItem('pdv01-som') !== '0'; } catch(e){ Som.ligado = true; }
+  try { const m = localStorage.getItem('pdv01-modelo'); if (m && ['quick','default','complex'].includes(m)) S.modelo = m; } catch(e){}
+
+  /* ---------- Retomada local da missão ---------- */
+  const CHAVE_PROGRESO = 'safe-pdv01-progresso-v1';
+  const ETAPAS = {
+    briefing:'escolha sua janela e defenda o palpite inicial.',
+    regua:'calcule a ISA local e o desvio de temperatura.',
+    pressao:'relacione o QNH ao erro de altitude.',
+    densidade:'explique o que o avião sente no ar quente.',
+    decisao:'compare as duas altitudes-densidade e decida.',
+    novato:'ensine o conceito para o copiloto recém-chegado.',
+    debrief:'consolide o que acertou e o que revisará.'
+  };
+  function etapaConcluida(id){ return id === 'briefing' ? S.status.briefing === 'concluido' : !!S.status[id]; }
+  function proximaEtapa(){ return ORDEM.find(id => !etapaConcluida(id)) || 'debrief'; }
+  function atualizarOrientacao(){
+    const atual = S.etapaAtual || proximaEtapa();
+    const pos = Math.max(0, ORDEM.indexOf(atual));
+    const feitas = ORDEM.filter(etapaConcluida).length;
+    const pct = Math.round((feitas / ORDEM.length) * 100);
+    const pronto = feitas === ORDEM.length;
+    document.getElementById('orientacaoEtapa').textContent = pronto ? 'Missão concluída' : 'Etapa ' + (pos + 1) + ' de ' + ORDEM.length;
+    document.getElementById('orientacaoTexto').innerHTML = pronto ? '<b>Objetivo concluído:</b> reveja o debriefing e a banca antes da próxima missão.' : '<b>Objetivo:</b> ' + esc(ETAPAS[atual] || ETAPAS.briefing);
+    document.getElementById('orientacaoPct').textContent = pct + '% concluído';
+    document.getElementById('orientacaoBarra').style.width = pct + '%';
+  }
+  function salvarProgresso(){
+    const dados = {
+      versao:1, salvoEm:Date.now(), etapaAtual:S.etapaAtual, palpite:S.palpite,
+      tentativas:S.tentativas, status:S.status, decisao:S.decisao ? {ad7:S.decisao.ad7, ad14:S.decisao.ad14, janela:S.decisao.janela} : null,
+      novatoRodada:S.novatoRodada,
+      jogo:{pontos:Jogo.pontos, sequencia:Jogo.sequencia, melhorSequencia:Jogo.melhorSequencia, pront:Jogo.pront, bancaCertas:Jogo.bancaCertas}
+    };
+    try { localStorage.setItem(CHAVE_PROGRESO, JSON.stringify(dados)); } catch(e){}
+  }
+  function limparProgresso(){ try { localStorage.removeItem(CHAVE_PROGRESO); } catch(e){} }
+  function restaurarProgresso(d){
+    if (!d || d.versao !== 1) return;
+    S.palpite = d.palpite || null; S.tentativas = Object.assign(S.tentativas, d.tentativas || {}); S.status = Object.assign(S.status, d.status || {});
+    S.decisao = d.decisao || null; S.novatoRodada = d.novatoRodada || 0;
+    if (d.jogo) { Jogo.pontos = d.jogo.pontos || 0; Jogo.sequencia = d.jogo.sequencia || 0; Jogo.melhorSequencia = d.jogo.melhorSequencia || 0; Jogo.pront = Object.assign(Jogo.pront, d.jogo.pront || {}); Jogo.bancaCertas = d.jogo.bancaCertas || 0; }
+    if (S.palpite) setPainel('p-palpite', S.palpite);
+    for (const id of ORDEM) {
+      if (!etapaConcluida(id)) continue;
+      concluir(id, true);
+      if (id === 'briefing') { document.getElementById('form-briefing').hidden = true; document.getElementById('pos-briefing').hidden = false; }
+      if (PERGUNTAS[id]) { PERGUNTAS[id].aoConcluir(); document.getElementById('intro-' + id).hidden = true; document.getElementById('q-' + id).hidden = false; document.getElementById('form-' + id).hidden = true; document.getElementById('pos-' + id).hidden = false; }
+      if (id === 'decisao') { document.getElementById('intro-decisao').hidden = true; document.getElementById('chat-decisao').hidden = false; document.getElementById('form-decisao').hidden = true; document.getElementById('pos-decisao').hidden = false; revelarRegua(); if (S.decisao) setPainel('p-decisao', S.decisao.janela + ' · registrada'); }
+      if (id === 'novato') { document.getElementById('form-novato').hidden = true; document.getElementById('pos-novato').hidden = false; }
+    }
+    animarNumero(document.getElementById('p-pontos'), Jogo.pontos); animarNumero(document.getElementById('p-seq'), Jogo.sequencia); Jogo.atualizar();
+    S.etapaAtual = proximaEtapa();
+    abrir(S.etapaAtual, true);
+    if (S.etapaAtual === 'briefing' && S.palpite) {
+      document.querySelectorAll('[data-palpite]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.palpite === S.palpite)));
+      document.getElementById('form-briefing').hidden = false;
+      document.getElementById('just-briefing').placeholder = 'Retome sua justificativa; o texto anterior não foi guardado.';
+    }
+    if (S.etapaAtual === 'novato') { S.novatoRodada = 0; document.getElementById('rodada-novato').textContent = 'rodada 1 de 3'; iniciarNovato(); }
+    if (S.etapaAtual === 'debrief') iniciarDebrief();
+    atualizarOrientacao();
+    registrar('missão', 'retomada', 'etapa ' + S.etapaAtual);
+  }
+  function oferecerRetomada(){
+    let d; try { d = JSON.parse(localStorage.getItem(CHAVE_PROGRESO) || 'null'); } catch(e){ d = null; }
+    if (!d || d.versao !== 1 || !d.status || Object.keys(d.status).length === 0) return;
+    const mins = Math.max(1, Math.round((Date.now() - (d.salvoEm || Date.now())) / 60000));
+    document.getElementById('retomadaTexto').textContent = 'Há uma missão salva neste navegador, interrompida há cerca de ' + mins + ' min. Você volta à próxima etapa; suas respostas abertas não são guardadas.';
+    document.getElementById('retomada').hidden = false;
+    document.getElementById('btnRetomar').onclick = () => { document.getElementById('retomada').hidden = true; restaurarProgresso(d); };
+    document.getElementById('btnDescartarRetomada').onclick = () => { limparProgresso(); location.reload(); };
+  }
+
+  /* ---------- Agente ---------- */
+  let sample = null;
+  let modo = 'verificando';
+  const sampleReady = (async () => {
+    if (!window.claude || typeof window.claude.use !== 'function') { setModo('ausente'); return null; }
+    try { sample = await window.claude.use('sample'); } catch(e) { sample = null; }
+    setModo(sample ? 'pronto' : 'ausente');
+    return sample;
+  })();
+
+  function setModo(m){
+    modo = m;
+    const el = document.getElementById('estado');
+    el.dataset.modo = m;
+    const t = document.getElementById('estadoTexto');
+    const chip = document.getElementById('chipVivo');
+    if (m === 'pronto') {
+      t.innerHTML = '<b>Agente ao vivo pronto.</b> O comandante e o copiloto respondem em tempo real, na sua conta claude.ai. Na primeira fala, o claude.ai pede sua autorização uma única vez.';
+      chip.textContent = 'Agente ao vivo';
+    } else if (m === 'ausente') {
+      t.innerHTML = '<b>Modo autoestudo.</b> O agente ao vivo só funciona com a página aberta no claude.ai. Aqui, cada pergunta mostra uma resposta-modelo depois que você escreve a sua.';
+      chip.textContent = 'Modo autoestudo';
+      chip.classList.remove('vivo');
+    }
+  }
+
+  function limparMarcador(texto){
+    return String(texto).replace(/\s*`?\[\[\s*STATUS[^\]]*\]\]`?\s*$/i,'').replace(/\s*`?\[\[[^\]]*$/,'').trimEnd();
+  }
+  function lerStatus(texto){
+    const m = String(texto).match(/\[\[\s*STATUS\s*:\s*([a-zçã_]+)\s*\]\]/i);
+    return m ? m[1].toLowerCase() : null;
+  }
+
+  /* Chama o agente com streaming dentro de uma bolha. Devolve {texto, status, tier} ou lança {code}. */
+  async function falar({papel, turns, chat, tier, json=false}){
+    const b = bolha(chat, papel, '', {pensando:true});
+    const fala = b.querySelector('.fala');
+    const ctl = new AbortController();
+    Voz.calar();
+    const fal = faladorIncremental(papel);
+    const parar = document.createElement('button');
+    parar.className = 'btn sec mini'; parar.type = 'button'; parar.textContent = 'Parar';
+    parar.onclick = () => { ctl.abort(); Voz.calar(); };
+    b.querySelector('.bolha-acoes').appendChild(parar);
+    fala.textContent = 'pensando… na primeira vez, o claude.ai pede sua autorização';
+    const opts = { cache:false, signal: ctl.signal, modelTier: tier || S.modelo };
+    if (!json) opts.onText = ({text}) => {
+      fala.classList.remove('pensando');
+      const limpo = limparMarcador(text);
+      fala.textContent = limpo;
+      const c = document.createElement('span'); c.className = 'cursor'; fala.appendChild(c);
+      if (Voz.ligada) fal.alimentar(limpo);
+    };
+    try {
+      let texto, tierApl;
+      if (json) {
+        const dados = await sample.json(turns, opts);
+        texto = dados; tierApl = 'default';
+      } else {
+        const r = await sample(turns, opts);
+        texto = r.text; tierApl = r.modelTierApplied;
+      }
+      parar.remove();
+      if (!json) { fala.classList.remove('pensando'); fala.textContent = limparMarcador(texto); if (Voz.ligada) fal.fechar(); }
+      return { texto, status: json ? null : lerStatus(texto), tier: tierApl, bolha: b };
+    } catch(e) {
+      parar.remove();
+      const code = (e && e.code) || 'upstream_error';
+      if (code === 'cancelled') {
+        fala.classList.remove('pensando');
+        fala.textContent = (e.text ? limparMarcador(e.text) + ' ' : '') + '[interrompido]';
+        registrar(papel, 'interrompido', '');
+        throw e;
+      }
+      if (OCULTAR.has(code)) {
+        sample = null; setModo('ausente');
+        b.remove();
+        throw e;
+      }
+      fala.classList.remove('pensando');
+      fala.textContent = (e.text && code !== 'refused') ? limparMarcador(e.text) + ' [interrompido]' : (ERRO[code] || ERRO.upstream_error);
+      b.dataset.papel = 'sistema'; b.querySelector('.chip').textContent = 'Aviso';
+      registrar(papel, 'erro', code);
+      throw e;
+    }
+  }
+
+  /* ---------- UI: bolhas, painel, etapas ---------- */
+  const NOME = {comandante:'Comandante', despachante:'Despachante', novato:'Copiloto novato', aluno:'Você', sistema:'Aviso', avaliador:'Debriefing'};
+  function bolha(chat, papel, texto, {pensando=false}={}){
+    const d = document.createElement('div');
+    d.className = 'bolha revelar ' + (papel === 'aluno' ? 'bolha-aluno' : 'bolha-agente');
+    d.dataset.papel = papel;
+    const chip = document.createElement('span'); chip.className = 'chip'; chip.textContent = NOME[papel] || papel;
+    const p = document.createElement('p'); p.className = 'fala' + (pensando ? ' pensando' : ''); p.textContent = texto;
+    if (papel !== 'aluno') p.setAttribute('aria-live','polite');
+    const ac = document.createElement('div'); ac.className = 'bolha-acoes';
+    d.append(chip, p, ac);
+    chat.appendChild(d);
+    return d;
+  }
+  function veredito(b, s){
+    const v = document.createElement('span'); v.className = 'veredito'; v.dataset.s = s;
+    const rot = {correto:'correto', parcial:'parcial', incorreto:'incorreto', explicado:'explicado pelo comandante', aceita:'decisão aceita', revisar:'revisar', autoestudo:'resposta-modelo', pulou:'etapa pulada', fim:'conversa encerrada', pergunta:'pergunta'};
+    v.textContent = rot[s] || s;
+    b.querySelector('.bolha-acoes').appendChild(v);
+    carimbar(b, s);
+    if (s === 'correto' || s === 'aceita') Som.correto(); else if (s === 'parcial' || s === 'revisar') Som.parcial(); else if (s === 'incorreto') Som.erro();
+  }
+  function setPainel(id, valor){
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = valor; el.classList.remove('vazio'); el.classList.add('novo');
+  }
+  function registrar(etapa, evento, detalhe){
+    const t = new Date();
+    const hora = [t.getHours(), t.getMinutes(), t.getSeconds()].map(n => String(n).padStart(2,'0')).join(':');
+    S.log.push({hora, etapa, evento, detalhe: detalhe || ''});
+    for (const id of ['log-bast','log-debrief']) {
+      const tb = document.querySelector('#' + id + ' tbody');
+      if (!tb) continue;
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + hora + '</td><td>' + esc(etapa) + '</td><td>' + esc(evento) + '</td><td>' + esc(detalhe || '') + '</td>';
+      tb.appendChild(tr);
+    }
+  }
+  function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function abrir(id, silencioso){
+    const sec = document.getElementById('et-' + id);
+    if (!sec) return;
+    S.etapaAtual = id;
+    sec.classList.remove('is-locked'); sec.classList.add('is-open','revelar');
+    if (!silencioso) Som.desbloqueio();
+    const li = document.querySelector('#passos li[data-p="' + id + '"]');
+    if (li) li.classList.add('open');
+    if (!silencioso) registrar(id, 'abriu', '');
+    if (!silencioso && id === 'novato') iniciarNovato();
+    if (!silencioso && id === 'debrief') iniciarDebrief();
+    atualizarOrientacao(); salvarProgresso();
+    if (!silencioso) setTimeout(() => sec.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'}), 30);
+  }
+  function concluir(id, restaurando){
+    const sec = document.getElementById('et-' + id);
+    if (sec) sec.classList.add('is-done');
+    const li = document.querySelector('#passos li[data-p="' + id + '"]');
+    if (li) li.classList.add('done');
+    if (!restaurando) { atualizarOrientacao(); salvarProgresso(); }
+  }
+  document.querySelectorAll('[data-abrir]').forEach(b => b.addEventListener('click', () => abrir(b.dataset.abrir)));
+  document.querySelectorAll('[data-bastidores]').forEach(b => b.addEventListener('click', () => {
+    const s = document.getElementById('bastidores');
+    s.hidden = !s.hidden;
+    if (!s.hidden) s.scrollIntoView({behavior:'smooth', block:'start'});
+  }));
+  for (const id of ['btnRecomecar','btnRecomecar2']) document.getElementById(id).addEventListener('click', () => { limparProgresso(); location.reload(); });
+  document.getElementById('regras-view').textContent = regrasBase();
+  const sel = document.getElementById('selModelo');
+  sel.value = S.modelo;
+  sel.addEventListener('change', () => { S.modelo = sel.value; try { localStorage.setItem('pdv01-modelo', S.modelo); } catch(e){} registrar('ajustes','modelo', S.modelo); });
+
+  /* Tempo */
+  setInterval(() => {
+    const s = Math.floor((Date.now() - S.inicio) / 1000);
+    document.getElementById('tempo').textContent = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+  }, 1000);
+
+  /* Pular */
+  document.querySelectorAll('[data-pular]').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.pular;
+    S.status[id] = 'pulou';
+    registrar(id, 'pulou', '');
+    const chat = document.getElementById('chat-' + id);
+    if (PERGUNTAS[id]) {
+      const bb = bolha(chat, 'comandante', PERGUNTAS[id].modelo); veredito(bb, 'pulou');
+      PERGUNTAS[id].aoConcluir();
+    }
+    if (id === 'decisao') { document.getElementById('chat-decisao').hidden = false; revelarRegua(); setPainel('p-decisao', 'não decidida'); }
+    if (Desafio.ativo && Desafio.ativo.id === id) Desafio.parar();
+    const intro = document.getElementById('intro-' + id); if (intro) intro.hidden = true;
+    const crono = document.getElementById('crono-' + id); if (crono) crono.hidden = true;
+    if (PERGUNTAS[id]) { const q = document.getElementById('q-' + id); if (q) q.hidden = false; }
+    Jogo._seq(false, true);
+    document.getElementById('form-' + id).hidden = true;
+    document.getElementById('pos-' + id).hidden = false;
+    concluir(id);
+  }));
+
+  /* ---------- Etapa 1 · Briefing ---------- */
+  document.querySelectorAll('[data-palpite]').forEach(b => b.addEventListener('click', () => {
+    S.palpite = b.dataset.palpite;
+    document.querySelectorAll('[data-palpite]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    setPainel('p-palpite', S.palpite);
+    document.getElementById('form-briefing').hidden = false;
+    document.getElementById('just-briefing').focus();
+  }));
+  document.getElementById('form-briefing').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const ta = document.getElementById('just-briefing');
+    const txt = ta.value.trim(); if (!txt) return;
+    S.palpiteJust = txt;
+    const form = ev.currentTarget; form.querySelector('button').disabled = true; ta.disabled = true;
+    const chat = document.getElementById('chat-briefing');
+    bolha(chat, 'aluno', 'Palpite: ' + S.palpite + '. ' + txt);
+    registrar('briefing', 'palpite', S.palpite + ' · ' + txt.slice(0,80));
+    await sampleReady;
+    if (sample) {
+      const turns = [
+        {role:'user', content: regrasBase() + '\n\nPAPEL: comandante instrutor, sóbrio e direto. Trata o aluno por "você".\n\nSITUAÇÃO: o aluno acabou de dar um palpite ANTES de estudar a lição. Não avalie como certo ou errado e não ensine ainda. Em uma frase, reconheça o raciocínio dele. Depois faça UMA pergunta que aponte para o que muda no ar entre 07:00 e 14:00. Feche dizendo que ele vai voltar a essa decisão no fim, depois de três conteúdos curtos. Termine com [[STATUS:parcial]].'},
+        {role:'user', content: 'Palpite do aluno: ' + S.palpite + '. Justificativa: "' + txt + '"'}
+      ];
+      try { const r = await falar({papel:'comandante', turns, chat}); registrar('briefing','comandante', 'modelo ' + r.tier); }
+      catch(e) { if (!sample) modeloBriefing(chat); }
+    } else {
+      modeloBriefing(chat);
+    }
+    form.hidden = true;
+    document.getElementById('pos-briefing').hidden = false;
+    S.status.briefing = 'concluido';
+    concluir('briefing');
+  });
+  function modeloBriefing(chat){
+    const b = bolha(chat, 'comandante', 'Anotado. Antes de eu concordar ou discordar: o que muda no ar entre 07:00 e 14:00, se a pista, o peso e a aeronave são os mesmos? Você volta a essa decisão no fim, depois de três conteúdos curtos.');
+    veredito(b, 'autoestudo');
+  }
+
+  /* ---------- Etapas 2 a 4 · Pergunta do comandante ---------- */
+  for (const id of Object.keys(PERGUNTAS)) {
+    const cfg = PERGUNTAS[id];
+    const form = document.getElementById('form-' + id);
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      const ta = document.getElementById('resp-' + id);
+      const txt = ta.value.trim(); if (!txt) return;
+      const btn = form.querySelector('button[type=submit]');
+      btn.disabled = true; ta.disabled = true;
+      const chat = document.getElementById('chat-' + id);
+      S.tentativas[id] += 1;
+      const n = S.tentativas[id];
+      if (n === 1) S.fracTempo[id] = (Desafio.ativo && Desafio.ativo.id === id) ? Desafio.parar() : 0;
+      Voz.pararOuvir();
+      bolha(chat, 'aluno', txt);
+      registrar(id, 'tentativa ' + n, txt.slice(0,80));
+      await sampleReady;
+      let status = null;
+      if (sample) {
+        const cabeca = regrasBase() + '\n\nPAPEL: comandante instrutor, sóbrio e direto. Trata o aluno por "você".\n\nPERGUNTA FEITA AO ALUNO: ' + cfg.pergunta + '\nGABARITO, só para você, não revele de uma vez: ' + cfg.gabarito + '\nDICAS SUGERIDAS, uma por turno, nesta ordem: ' + cfg.dicas.join(' | ') + '\n\nVEREDITO: se a resposta estiver certa e completa, confirme em até duas frases, acrescente o porquê em uma frase e termine com [[STATUS:correto]]. Se estiver parcialmente certa, diga o que já está certo, dê UMA dica e termine com [[STATUS:parcial]]. Se estiver errada, dê UMA dica sem revelar o resultado e termine com [[STATUS:incorreto]]. Na terceira tentativa, explique a resposta completa e termine com [[STATUS:explicado]].';
+        const turns = [{role:'user', content: cabeca}];
+        for (const h of S.historico[id]) { turns.push({role:'user', content: h.aluno}); turns.push({role:'assistant', content: h.agente}); }
+        const ultima = 'Tentativa ' + n + (n >= 3 ? ' (terceira e última: agora explique a resposta completa e termine com [[STATUS:explicado]])' : '') + '. Resposta do aluno: "' + txt + '"';
+        turns.push({role:'user', content: ultima});
+        try {
+          const r = await falar({papel:'comandante', turns, chat});
+          status = r.status || (n >= 3 ? 'explicado' : 'parcial');
+          S.historico[id].push({aluno: ultima, agente: r.texto});
+          veredito(r.bolha, status);
+          registrar(id, 'veredito', status + ' · modelo ' + r.tier);
+        } catch(e) {
+          if (!sample) status = modeloComandante(chat, cfg);
+          else { btn.disabled = false; ta.disabled = false; return; }
+        }
+      } else {
+        status = modeloComandante(chat, cfg);
+      }
+      S.status[id] = status;
+      const fechou = ['correto','explicado','autoestudo'].includes(status) || n >= 3;
+      if (fechou) {
+        cfg.aoConcluir();
+        Jogo.vereditoPergunta(id, status, n, S.fracTempo[id] || 0, form);
+        form.hidden = true;
+        document.getElementById('pos-' + id).hidden = false;
+        concluir(id);
+      } else {
+        ta.value = ''; ta.disabled = false; btn.disabled = false;
+        ta.placeholder = 'Tente de novo com a dica do comandante.';
+        ta.focus();
+      }
+    });
+  }
+  function modeloComandante(chat, cfg){
+    const b = bolha(chat, 'comandante', cfg.modelo);
+    veredito(b, 'autoestudo');
+    return 'autoestudo';
+  }
+
+  /* ---------- Etapa 5 · Decisão ---------- */
+  const REF = { isa2000: 11, d7: 7, d14: 23, ad7: 2840, ad14: 4760, tol: 220 };
+  const MAPA_HORAS = {
+    '07': {temp:'18 °C', ad:'≈ 2.840 ft', cond:'ISA +7', legenda:'Menor exigência relativa de pista', nota:'Referência visual de margem relativa; não substitui o cálculo com o manual de voo, o E6B e as condições reais.'},
+    '14': {temp:'34 °C', ad:'≈ 4.760 ft', cond:'ISA +23', legenda:'Maior exigência relativa de pista', nota:'A lição registra quase 200 m a mais de corrida nesta condição. Referência visual: a decisão operacional exige o manual de voo, o E6B e as condições reais.'}
+  };
+  function atualizarMapaOperacional(hora){
+    const mapa = document.getElementById('mapaOperacional'); const d = MAPA_HORAS[hora];
+    if (!mapa || !d) return;
+    mapa.dataset.hora = hora;
+    document.getElementById('mapaTemp').textContent = d.temp;
+    document.getElementById('mapaAd').textContent = d.ad;
+    document.getElementById('mapaCond').textContent = d.cond;
+    document.getElementById('mapaLegenda').textContent = d.legenda;
+    document.getElementById('mapaNota').textContent = d.nota;
+    mapa.querySelectorAll('[data-mapa-hora]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mapaHora === hora)));
+  }
+  document.querySelectorAll('[data-mapa-hora]').forEach(b => b.addEventListener('click', () => atualizarMapaOperacional(b.dataset.mapaHora)));
+  function revelarRegua(){ 
+    const rg = document.getElementById('regua-decisao'); rg.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => rg.querySelectorAll('.fill').forEach(f => { f.style.width = f.dataset.w + '%'; })));
+    setPainel('p-ad7', '≈ 2.840 ft'); setPainel('p-ad14', '≈ 4.760 ft');
+    setPainel('p-isa','11 °C'); setPainel('p-d7','ISA +7'); setPainel('p-d14','ISA +23');
+  }
+  document.getElementById('form-decisao').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const form = ev.currentTarget;
+    const ad7 = Number(document.getElementById('ad7').value);
+    const ad14 = Number(document.getElementById('ad14').value);
+    const janela = (form.querySelector('input[name=janela]:checked') || {}).value;
+    const just = document.getElementById('just-decisao').value.trim();
+    if (!janela || !just) return;
+    const btn = form.querySelector('button[type=submit]');
+    btn.disabled = true; form.querySelectorAll('input,textarea').forEach(x => x.disabled = true);
+    S.tentativas.decisao += 1; const n = S.tentativas.decisao;
+    if (n === 1) S.fracTempo.decisao = (Desafio.ativo && Desafio.ativo.id === 'decisao') ? Desafio.parar() : 0;
+    Voz.pararOuvir();
+    const chat = document.getElementById('chat-decisao');
+    bolha(chat, 'aluno', 'AD 07:00: ' + ad7 + ' ft. AD 14:00: ' + ad14 + ' ft. Janela: ' + janela + '. ' + just);
+    registrar('decisao', 'tentativa ' + n, janela + ' · ' + ad7 + '/' + ad14);
+    const ok7 = Math.abs(ad7 - REF.ad7) <= REF.tol, ok14 = Math.abs(ad14 - REF.ad14) <= REF.tol;
+    await sampleReady;
+    let status = null;
+    if (sample) {
+      const cabeca = regrasBase() + '\n\nPAPEL: comandante instrutor, sóbrio e direto. Trata o aluno por "você".\n\nTAREFA: conferir a decisão do aluno. Valores de referência calculados pela página: ISA a 2.000 ft = 11 °C; 07:00 = ISA +7, AD ≈ 2.840 ft; 14:00 = ISA +23, AD ≈ 4.760 ft; tolerância ±220 ft. Janela recomendada: 07:00.\nA página já conferiu os números do aluno: AD 07:00 ' + (ok7 ? 'dentro' : 'fora') + ' da tolerância; AD 14:00 ' + (ok14 ? 'dentro' : 'fora') + ' da tolerância.\n\nVEREDITO: se os dois números estão dentro da tolerância, a janela é 07:00 e a justificativa liga calor a menor densidade e a mais pista, aceite em até três frases, ligue à corrida de quase 200 m a mais da lição e termine com [[STATUS:aceita]]. Se um número está fora, pergunte qual passo ele usou (ISA local, desvio, ×120) e dê UMA dica sobre o passo provável, sem dar o resultado; termine com [[STATUS:revisar]]. Se os números estão certos e ele escolheu 14:00, pergunte o que 4.800 ft sentidos fazem com uma pista de 900 m; termine com [[STATUS:revisar]]. Na terceira tentativa, mostre a conta completa e a janela, e termine com [[STATUS:explicado]].';
+      const turns = [{role:'user', content: cabeca}];
+      for (const h of S.historico.decisao) { turns.push({role:'user', content: h.aluno}); turns.push({role:'assistant', content: h.agente}); }
+      const ultima = 'Tentativa ' + n + (n >= 3 ? ' (terceira e última: mostre a conta completa e termine com [[STATUS:explicado]])' : '') + '. AD 07:00 = ' + ad7 + ' ft; AD 14:00 = ' + ad14 + ' ft; janela ' + janela + '. Justificativa: "' + just + '"';
+      turns.push({role:'user', content: ultima});
+      try {
+        const r = await falar({papel:'comandante', turns, chat});
+        status = r.status || (n >= 3 ? 'explicado' : 'revisar');
+        S.historico.decisao.push({aluno: ultima, agente: r.texto});
+        veredito(r.bolha, status);
+        registrar('decisao', 'veredito', status + ' · modelo ' + r.tier);
+      } catch(e) {
+        if (!sample) status = modeloDecisao(chat, ok7 && ok14 && janela === '07:00');
+        else { btn.disabled = false; form.querySelectorAll('input,textarea').forEach(x => x.disabled = false); return; }
+      }
+    } else {
+      status = modeloDecisao(chat, ok7 && ok14 && janela === '07:00');
+    }
+    S.status.decisao = status;
+    S.decisao = {ad7, ad14, janela, just};
+    const fechou = ['aceita','explicado','autoestudo'].includes(status) || n >= 3;
+    if (fechou) {
+      revelarRegua();
+      Jogo.vereditoDecisao(status, n, S.fracTempo.decisao || 0, form);
+      setPainel('p-decisao', janela + (status === 'aceita' ? ' · aceita' : ''));
+      form.hidden = true;
+      document.getElementById('pos-decisao').hidden = false;
+      concluir('decisao');
+    } else {
+      btn.disabled = false; form.querySelectorAll('input,textarea').forEach(x => x.disabled = false);
+      document.getElementById('just-decisao').focus();
+    }
+  });
+  function modeloDecisao(chat, certo){
+    const b = bolha(chat, 'comandante', (certo ? 'Decisão coerente. ' : 'Confira a conta. ') + 'ISA a 2.000 ft é 11 °C. Às 07:00, 18 °C, o dia é ISA +7: 2.000 + 7 × 120 ≈ 2.840 ft. Às 14:00, 34 °C, ISA +23: 2.000 + 23 × 120 ≈ 4.760 ft. Mesma pista, mesma aeronave, e à tarde ela decola como se estivesse a 4.800 ft. A janela é 07:00.');
+    veredito(b, 'autoestudo');
+    return 'autoestudo';
+  }
+
+  /* ---------- Etapa 6 · Ensine o novato ---------- */
+  const NOVATO_ABERTURA = 'Vi a escala e não entendi. Por que 07:00 e não 14:00? A pista é a mesma, o avião é o mesmo.';
+  const NOVATO_MODELO = [
+    'Tá, mas ar quente é mais leve, não é? Não devia ser mais fácil de sair do chão?',
+    'E esse número de 4.800 ft, de onde saiu, se o aeródromo fica a 2.000 ft?'
+  ];
+  let novatoIniciado = false;
+  function iniciarNovato(){
+    if (novatoIniciado) return; novatoIniciado = true;
+    const chat = document.getElementById('chat-novato');
+    bolha(chat, 'novato', NOVATO_ABERTURA);
+    S.historico.novato.push({quem:'novato', texto: NOVATO_ABERTURA});
+    Som.radio(); Voz.falar(paraFala(NOVATO_ABERTURA), 'novato');
+    atualizarMics();
+  }
+  document.getElementById('form-novato').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const ta = document.getElementById('resp-novato');
+    const txt = ta.value.trim(); if (!txt) return;
+    const form = ev.currentTarget; const btn = form.querySelector('button[type=submit]');
+    btn.disabled = true; ta.disabled = true;
+    const chat = document.getElementById('chat-novato');
+    S.novatoRodada += 1; const n = S.novatoRodada;
+    Voz.pararOuvir();
+    bolha(chat, 'aluno', txt);
+    S.historico.novato.push({quem:'aluno', texto: txt});
+    registrar('novato', 'explicação ' + n, txt.slice(0,80));
+    await sampleReady;
+    if (sample) {
+      const cabeca = regrasBase() + '\n\nPAPEL: copiloto recém-chegado que NÃO estudou esta lição. Você só faz perguntas curtas e ingênuas, uma por vez, no máximo 40 palavras, sobre o que o aluno acabou de explicar. Nunca ensine, nunca corrija, nunca confirme se está certo. Se a explicação do aluno tiver um erro ou uma lacuna em relação aos FATOS, faça uma pergunta que exponha isso sem dizer que está errado; por exemplo, se ele confundir leve com denso, pergunte se o ar mais leve não ajudaria a subir. Se a explicação estiver boa, faça uma pergunta que puxe o próximo passo: de onde vem o número da altitude-densidade, o que isso faz com a pista, o que muda com o QNH. Termine com [[STATUS:pergunta]]. Contexto da missão: o aluno escolheu decolar às 07:00 e não às 14:00 de uma pista de 900 m a 2.000 ft de elevação, com 18 °C de manhã e 34 °C à tarde.';
+      const turns = [{role:'user', content: cabeca}];
+      turns.push({role:'user', content: 'Você começou perguntando: "' + NOVATO_ABERTURA + '"'});
+      for (const h of S.historico.novato.slice(1)) {
+        if (h.quem === 'aluno') turns.push({role:'user', content: 'Aluno explica: "' + h.texto + '"'});
+        else turns.push({role:'assistant', content: h.texto});
+      }
+      if (n >= 3) turns.push({role:'user', content: 'Esta foi a última rodada. Agora, em vez de perguntar, diga em até 40 palavras o que você entendeu, com suas palavras de novato, sem corrigir nada, e termine com [[STATUS:fim]].'});
+      try {
+        const r = await falar({papel:'novato', turns, chat});
+        S.historico.novato.push({quem:'novato', texto: r.texto});
+        registrar('novato', n >= 3 ? 'fechamento' : 'pergunta', 'modelo ' + r.tier);
+      } catch(e) {
+        if (!sample) modeloNovato(chat, n);
+        else { btn.disabled = false; ta.disabled = false; return; }
+      }
+    } else {
+      modeloNovato(chat, n);
+    }
+    Jogo.novato(n, form);
+    if (n >= 3) {
+      form.hidden = true;
+      document.getElementById('pos-novato').hidden = false;
+      S.status.novato = 'concluido';
+      concluir('novato');
+    } else {
+      document.getElementById('rodada-novato').textContent = 'rodada ' + (n + 1) + ' de 3';
+      ta.value = ''; ta.disabled = false; btn.disabled = false; ta.focus();
+    }
+  });
+  function modeloNovato(chat, n){
+    const t = n >= 3 ? 'Acho que entendi: o ar quente é mais ralo, o avião sente uma altitude maior e precisa de mais pista. Por isso de manhã.' : NOVATO_MODELO[n - 1];
+    const b = bolha(chat, 'novato', t); veredito(b, 'autoestudo');
+    S.historico.novato.push({quem:'novato', texto: t});
+  }
+
+  /* ---------- Etapa 7 · Debriefing ---------- */
+  let debriefIniciado = false;
+  async function iniciarDebrief(){
+    if (debriefIniciado) return; debriefIniciado = true;
+    montarQuiz();
+    renderCumprida();
+    const chat = document.getElementById('chat-debrief');
+    const out = document.getElementById('debrief-out');
+    await sampleReady;
+    const resumo = transcricao();
+    if (sample) {
+      const prompt = regrasBase() + '\n\nPAPEL: avaliador do Flight Standards. Leia a transcrição da missão e produza o debriefing. Seja específico: cite o que o aluno escreveu. Não invente nada que não esteja na transcrição.\n\nTRANSCRIÇÃO:\n' + resumo + '\n\nResponda SOMENTE com um objeto JSON neste formato, sem texto fora dele:\n{"nota_explicacao": 1 a 5 (qualidade da explicação ao copiloto), "pontos_fortes": [até 3 frases curtas], "lacunas": [até 3 frases curtas; vazio se não houver], "frase_para_levar": "uma frase curta, própria desta missão", "revisar": [{"quando": "ex.: antes da PDV-02", "o_que": "ex.: a regra dos 30 ft por hPa"}]}';
+      try {
+        const r = await falar({papel:'avaliador', turns: prompt, chat, tier:'default', json:true});
+        r.bolha.remove();
+        S.debrief = r.texto;
+        renderDebrief(r.texto);
+        registrar('debrief', 'gerado', 'modelo default');
+      } catch(e) {
+        const code = e && e.code;
+        if (code !== 'cancelled' && sample) {
+          const ultimo = chat.lastElementChild;
+          const b = (ultimo && ultimo.classList.contains('bolha')) ? ultimo : bolha(chat, 'sistema', ERRO[code] || ERRO.upstream_error);
+          const again = document.createElement('button'); again.className = 'btn sec mini'; again.type = 'button'; again.textContent = 'Tentar de novo';
+          again.onclick = () => { b.remove(); document.getElementById('debrief-out').innerHTML = ''; debriefIniciado = false; iniciarDebrief(); };
+          b.querySelector('.bolha-acoes').appendChild(again);
+        }
+        renderDebrief(debriefLocal(), true);
+      }
+    } else {
+      renderDebrief(debriefLocal(), true);
+    }
+    S.status.debrief = 'concluido';
+    concluir('debrief');
+  }
+  function transcricao(){
+    const L = [];
+    L.push('Palpite inicial antes de estudar: ' + (S.palpite || 'não deu') + '. Justificativa: "' + S.palpiteJust + '"');
+    for (const id of ['regua','pressao','densidade']) {
+      L.push('Pergunta (' + id + '): ' + PERGUNTAS[id].pergunta);
+      if (!S.historico[id].length) L.push('  Resultado: ' + (S.status[id] || 'sem resposta'));
+      for (const h of S.historico[id]) { L.push('  Aluno: ' + h.aluno.slice(0,400)); L.push('  Comandante: ' + limparMarcador(h.agente).slice(0,300)); }
+      L.push('  Veredito final: ' + (S.status[id] || 'nenhum') + ' em ' + S.tentativas[id] + ' tentativa(s)');
+    }
+    if (S.decisao) L.push('Decisão: AD 07:00 = ' + S.decisao.ad7 + ' ft (ref. 2.840); AD 14:00 = ' + S.decisao.ad14 + ' ft (ref. 4.760); janela ' + S.decisao.janela + ' (ref. 07:00). Justificativa: "' + S.decisao.just.slice(0,400) + '". Veredito: ' + S.status.decisao + ' em ' + S.tentativas.decisao + ' tentativa(s).');
+    else L.push('Decisão: ' + (S.status.decisao || 'não enviada'));
+    L.push('Conversa com o copiloto novato:');
+    for (const h of S.historico.novato) L.push('  ' + (h.quem === 'aluno' ? 'Aluno' : 'Novato') + ': ' + limparMarcador(h.texto).slice(0,400));
+    return L.join('\n');
+  }
+  function debriefLocal(){
+    const fortes = [], lacunas = [];
+    const nomes = {regua:'a régua ISA', pressao:'a pressão e o QNH', densidade:'a densidade'};
+    for (const id of ['regua','pressao','densidade']) {
+      const s = S.status[id];
+      if (s === 'correto' && S.tentativas[id] === 1) fortes.push('Acertou ' + nomes[id] + ' na primeira tentativa.');
+      else if (s === 'correto') fortes.push('Chegou a ' + nomes[id] + ' com a dica do comandante.');
+      else if (s === 'explicado') lacunas.push('Precisou da explicação completa em ' + nomes[id] + '.');
+      else if (s === 'pulou') lacunas.push('Pulou ' + nomes[id] + '.');
+    }
+    if (S.status.decisao === 'aceita') fortes.push('Decisão aceita com os números certos.');
+    else if (S.status.decisao === 'explicado' || S.status.decisao === 'pulou') lacunas.push('A conta da altitude-densidade precisa de revisão.');
+    if (S.novatoRodada >= 3) fortes.push('Sustentou três rodadas de explicação ao copiloto.');
+    return {
+      nota_explicacao: null,
+      pontos_fortes: fortes.length ? fortes : ['Concluiu a missão.'],
+      lacunas,
+      frase_para_levar: 'Mesma pista, mesma aeronave: mudou o ar.',
+      revisar: [{quando:'antes da PDV-02', o_que:'ISA como régua e a regra dos 120 ft por °C'}, {quando:'na MET-04', o_que:'30 ft por hectopascal e o sentido do erro de QNH'}]
+    };
+  }
+  function renderDebrief(d, local=false){
+    const out = document.getElementById('debrief-out');
+    const li = arr => (Array.isArray(arr) && arr.length) ? arr.map(x => '<li>' + esc(typeof x === 'string' ? x : JSON.stringify(x)) + '</li>').join('') : '<li>nada registrado</li>';
+    const rev = Array.isArray(d.revisar) ? d.revisar.map(r => '<li><b>' + esc(r.quando || '') + ':</b> ' + esc(r.o_que || '') + '</li>').join('') : '';
+    out.innerHTML =
+      '<div class="debrief revelar">' +
+        '<div><h4>Explicação ao copiloto</h4>' + (d.nota_explicacao != null ? '<span class="nota">' + esc(d.nota_explicacao) + '</span> <span style="color:var(--muted)">de 5</span>' : '<span style="color:var(--muted)">sem nota no modo autoestudo</span>') + '<p style="margin:8px 0 0;font-weight:600">' + esc(d.frase_para_levar || '') + '</p></div>' +
+        '<div><h4>Pontos fortes</h4><ul>' + li(d.pontos_fortes) + '</ul></div>' +
+        '<div><h4>Lacunas</h4><ul>' + li(d.lacunas) + '</ul></div>' +
+        '<div><h4>Revisar</h4><ul>' + (rev || '<li>nada agendado</li>') + '</ul></div>' +
+      '</div>' + (local ? '<p style="font-size:13.5px;color:var(--muted)">Debriefing montado pela própria página, a partir dos vereditos. Com o agente, ele é escrito a partir da transcrição.</p>' : '');
+  }
+  function montarQuiz(){
+    const q = document.getElementById('quiz');
+    if (q.childElementCount) return;
+    for (const item of QUIZ) {
+      const d = document.createElement('div'); d.className = 'quiz-q';
+      let h = '<p>' + item.n + '. ' + esc(item.e) + '</p>';
+      for (const k of ['a','b','c','d']) h += '<label><input type="radio" name="q' + item.n + '" value="' + k + '"> ' + k + ') ' + esc(item.a[k]) + '</label>';
+      h += '<div class="exp" hidden></div>';
+      d.innerHTML = h;
+      d.querySelectorAll('input').forEach(r => r.addEventListener('change', () => {
+        const exp = d.querySelector('.exp'); exp.hidden = false;
+        const ok = r.value === item.c;
+        exp.className = 'exp ' + (ok ? 'ok' : 'nok');
+        exp.textContent = (ok ? 'Correto. ' : 'Não. A correta é a letra ' + item.c + '. ') + item.x;
+        registrar('banca', 'questão ' + item.n, ok ? 'acertou' : 'errou (' + r.value + ')');
+        if (ok) Som.correto(); else Som.erro();
+        Jogo.banca(ok, d);
+      }));
+      q.appendChild(d);
+    }
+  }
+
+  /* ---------- Desafios, microfone, voz e som: controles ---------- */
+  const TEMPO = {regua:75, pressao:75, densidade:75, decisao:120};
+  document.querySelectorAll('[data-desafio]').forEach(b => b.addEventListener('click', async () => {
+    const id = b.dataset.desafio;
+    const intro = document.getElementById('intro-' + id); if (intro) intro.hidden = true;
+    Som.radio();
+    if (id === 'decisao') {
+      document.getElementById('chat-decisao').hidden = false;
+      Voz.falar(paraFala(document.getElementById('q-decisao').textContent), 'despachante', {aoFim: () => Som.radioFim()});
+    } else {
+      const q = document.getElementById('q-' + id); q.hidden = false;
+      Voz.falar(paraFala(PERGUNTAS[id].pergunta), 'comandante', {aoFim: () => { Som.radioFim(); ouvirAutomatico(document.getElementById('form-' + id)); }});
+      await datilografar(q, PERGUNTAS[id].pergunta);
+    }
+    const form = document.getElementById('form-' + id); form.hidden = false;
+    atualizarMics();
+    const primeiro = form.querySelector('textarea, input'); if (primeiro) primeiro.focus();
+    S.desafioRecebido[id] = Date.now();
+    Desafio.iniciar(id, TEMPO[id] || 75, {aoFim: () => { const fr = 'Tempo. Responda assim mesmo, com o que tem.'; bolha(document.getElementById('chat-' + id), 'comandante', fr); Voz.falar(fr, 'comandante'); registrar(id, 'tempo esgotado', ''); }});
+    registrar(id, 'desafio recebido', (TEMPO[id] || 75) + ' s');
+  }));
+
+  document.querySelectorAll('[data-mic]').forEach(b => { b.dataset.rotulo = b.textContent; b.addEventListener('click', async () => {
+    const ta = document.getElementById(b.dataset.mic); if (!ta) return;
+    if (Voz.ouvindo) { Voz.pararOuvir(); return; }
+    const form = b.closest('form');
+    b.disabled = true; const ok0 = await pedirMic(); b.disabled = false;
+    if (!ok0) return;
+    const ok = Voz.ouvir(ta, {botao: b, aoEnviar: () => { if (form && ta.value.trim()) form.requestSubmit(); }});
+    if (!ok) avisoMic('O reconhecimento de voz não está disponível neste navegador. Digite a resposta.');
+  }); });
+  function ouvirAutomatico(form){ if (!Voz.ligada || !Voz.micOk || Voz.ouvindo || !form || form.hidden) return; const b = form.querySelector('[data-mic]'); if (b && !b.hidden) b.click(); }
+  function atualizarMics(){ const mostrar = Voz.ligada && !!Voz.RecCtor && !Voz.micBloqueado; document.querySelectorAll('[data-mic]').forEach(b => { b.hidden = !mostrar; }); document.querySelectorAll('[data-dica-voz]').forEach(s => { s.hidden = !mostrar; }); const ob = document.getElementById('btnOuvirBriefing'); if (ob) ob.hidden = !(Voz.ligada && Voz.suportaTTS); }
+
+  const btnVoz = document.getElementById('btnVoz'), btnRadio = document.getElementById('btnRadio'), btnSom = document.getElementById('btnSom');
+  function pintarToggles(){
+    btnVoz.setAttribute('aria-pressed', String(Voz.ligada)); btnVoz.textContent = 'Voz: ' + (Voz.ligada ? 'ligada' : 'desligada');
+    btnRadio.setAttribute('aria-pressed', String(Voz.radio)); btnRadio.textContent = 'Canal VHF: ' + (Voz.radio ? 'ligado' : 'limpo');
+    btnSom.setAttribute('aria-pressed', String(Som.ligado)); btnSom.textContent = 'Som: ' + (Som.ligado ? 'ligado' : 'desligado'); atualizarMics();
+  }
+  btnVoz.addEventListener('click', () => { Voz.ligada = !Voz.ligada; if (!Voz.ligada) { Voz.calar(); Voz.pararOuvir(); } try { localStorage.setItem('pdv01-voz', Voz.ligada ? '1' : '0'); } catch(e){} pintarToggles(); avisarQualidadeVoz(); registrar('ajustes', 'voz', Voz.ligada ? 'ligada' : 'desligada'); if (Voz.ligada) Voz.falar('Voz ligada.', 'comandante'); });
+  btnRadio.addEventListener('click', () => { Voz.radio = !Voz.radio; try { localStorage.setItem('pdv01-radio', Voz.radio ? '1' : '0'); } catch(e){} pintarToggles(); registrar('ajustes', 'canal VHF', Voz.radio ? 'ligado' : 'limpo'); if (Voz.ligada) Voz.falar(Voz.radio ? 'Canal VHF ligado. Prossiga.' : 'Canal limpo. Prossiga.', 'comandante'); });
+  btnSom.addEventListener('click', async () => { await Som.ligar(!Som.ligado); try { localStorage.setItem('pdv01-som', Som.ligado ? '1' : '0'); } catch(e){} pintarToggles(); registrar('ajustes', 'som', Som.ligado ? 'ligado' : 'desligado'); if (Som.ligado) Som.desbloqueio(); });
+  const acordar = () => { if (Som.ligado) Som.ligar(true); };
+  document.addEventListener('pointerdown', acordar, {once:true}); document.addEventListener('keydown', acordar, {once:true});
+  document.getElementById('btnOuvirBriefing').addEventListener('click', () => { const t = document.querySelector('#chat-briefing .bolha[data-papel="despachante"] .fala').textContent; Som.radio(); Voz.falar(paraFala(t), 'despachante', {aoFim: () => Som.radioFim()}); });
+
+  function preencherVozes(){ const sc = document.getElementById('selVozCmd'), sn = document.getElementById('selVozNov'); if (!sc || !sn) return; for (const sel of [sc, sn]) { sel.innerHTML = ''; if (!Voz.vozes.length) { const o = document.createElement('option'); o.textContent = 'nenhuma voz em português encontrada'; sel.appendChild(o); sel.disabled = true; continue; } sel.disabled = false; Voz.vozes.forEach((v, i) => { const o = document.createElement('option'); o.value = String(i); o.textContent = v.name + ' (' + v.lang + ')'; sel.appendChild(o); }); } if (Voz.vozCmd) sc.value = String(Voz.vozes.indexOf(Voz.vozCmd)); if (Voz.vozNov) sn.value = String(Voz.vozes.indexOf(Voz.vozNov)); const cap = document.getElementById('capVoz'); cap.textContent = (Voz.suportaTTS ? 'Síntese de voz disponível, ' + Voz.vozes.length + ' voz(es) em português' + (Voz.qualidade >= 100 ? ', com voz natural. ' : ', nenhuma natural (no Edge há Antonio e Francisca). ') : 'Este navegador não tem síntese de voz. ') + (Voz.RecCtor ? 'Reconhecimento de fala disponível. Microfone neste quadro: ' + politicaMic() + ' pela política de permissões.' : 'Este navegador não tem reconhecimento de fala; a resposta é digitada.'); }
+  document.getElementById('selVozCmd').addEventListener('change', e => { Voz.vozCmd = Voz.vozes[Number(e.target.value)] || Voz.vozCmd; Voz.escolhaManual = true; avisarQualidadeVoz(); });
+  document.getElementById('selVozNov').addEventListener('change', e => { Voz.vozNov = Voz.vozes[Number(e.target.value)] || Voz.vozNov; Voz.escolhaManual = true; avisarQualidadeVoz(); });
+  document.querySelectorAll('[data-testar-voz]').forEach(b => b.addEventListener('click', () => { const p = b.dataset.testarVoz; const lig = Voz.ligada; Voz.ligada = true; Voz.falar(p === 'novato' ? 'Comandante, não entendi por que sete horas e não quatorze.' : 'Aqui é o comandante. Isa a dois mil pés: onze graus. Câmbio.', p); Voz.ligada = lig; }));
+  document.querySelectorAll('[data-testar-som]').forEach(b => b.addEventListener('click', async () => { await Som.ligar(true); pintarToggles(); const t = b.dataset.testarSom; if (t === 'bed') { Som.iniciarBed(); Som.setRitmo(96); setTimeout(() => Som.pararBed(), 5000); } else if (typeof Som[t] === 'function') Som[t](); }));
+  if (!Voz.suportaTTS) Voz.ligada = false;
+  if (Voz.suportaTTS) { Voz.carregarVozes(); speechSynthesis.addEventListener('voiceschanged', () => Voz.carregarVozes()); } else preencherVozes();
+  pintarToggles();
+
+  function renderCumprida(){
+    const s = Math.floor((Date.now() - S.inicio) / 1000);
+    const tempo = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    const el = document.getElementById('missao-cumprida');
+    el.innerHTML = '<div class="cumprida revelar"><span class="carimbo-grande">Missão cumprida</span><div class="stats"><div><div class="lab">Pontos</div><div class="val" id="c-pontos">0</div></div><div><div class="lab">Tempo</div><div class="val">' + tempo + '</div></div><div><div class="lab">Prontidão</div><div class="val" id="c-pront">0%</div></div><div><div class="lab">Melhor sequência</div><div class="val">' + Jogo.melhorSequencia + '</div></div></div></div>';
+    animarNumero(document.getElementById('c-pontos'), Jogo.pontos);
+    animarNumero(document.getElementById('c-pront'), Jogo.prontidao(), '%');
+    Som.vitoria();
+    Voz.falar('Missão cumprida. Bom trabalho. Agora o debriefing.', 'comandante');
+  }
+
+  atualizarOrientacao();
+  oferecerRetomada();
+  window.addEventListener('pagehide', salvarProgresso);
+  registrar('missão', 'início', 'PDV-01');
+})();
+</script>
+</body>
+</html>
